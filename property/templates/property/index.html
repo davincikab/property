@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" 
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="#">
+          <img src="images/david_logo.png" width="45" height="45" alt="" loading="lazy">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li>
+            </ul>
+          </div>
+    </nav>
+
+
+    <div class="main-container" id="container">
+        <div class="card-section">
+            <div class="search-tab" id="filter-section">
+                <!-- collapsible search tab -->
+                <span class="collapse-btn" id="collapse-filter"></span>
+
+                <div class="filter px-2 py-2">
+                    <div class="form-row mt-3">
+                        <div class="col-md-3">
+                            <select class="custom-select">
+                                <option selected value="buy">Buy</option>
+                                <option value="1">To rent</option>
+                                <option value="2">Professional to Buy</option>
+                                <option value="3">Property to Rent</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control border-none" placeholder="Search Address ...">
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-brand">Look for</span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mt-2">
+                        <div class="col-md-3">
+                            <select class="custom-select" id="property-item">
+                                <option selected value="buy">Type of Property</option>
+                                <option value="1">Villa</option>
+                                <option value="2">Bungalow</option>
+                                <option value="3">Apartment</option>
+                                <option value="">Penthouse</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 col-xs-6">
+                            <select class="custom-select" id="min-price">
+                                <option selected value="buy">Min Price</option>
+                                <option value="1">10000</option>
+                                <option value="2">20000</option>
+                                <option value="2">40000</option>
+                                <option value="2">60000</option>
+                                <option value="3">10000000</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 col-xs-6">
+                            <select class="custom-select" id="max-price">
+                                <option selected value="buy">Max Price</option>
+                                <option value="1">10000</option>
+                                <option value="2">20000</option>
+                                <option value="2">40000</option>
+                                <option value="2">60000</option>
+                                <option value="3">10000000</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 col-xs-6">
+                            <select class="custom-select">
+                                <option selected value="buy">Min Rooms</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-2 ">
+                            <select class="custom-select">
+                                <option selected value="buy">Max Rooms</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-summary ml-4 mt-2">
+                <p class="my-0">8 stays found</p>
+                <h4 class="my-0">Stays in selected map area</h4>
+            </div>
+        
+            <div id="card-list" class="card-list">
+            </div>
+
+            <!-- pagination -->
+            <nav class="pagination-section" aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+
+            <!-- People also searched for -->
+            <div class="container-fluid bg-light">
+                <h4 class="my-0">People also Searched for</h4>
+
+                <div class="similar-search " style="height: 200px;">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div class="map" id="mapContainer">
+            </div>
+        </div>
+
+        <div class="toggle-map">
+            <input type="checkbox" name="toggle-map" id="map-toggler">
+            <label for="toggle-map">Toggle Map</label>
+        </div>
+    </div>
+
+    <div class="footer bg-dark" style="height: 200px;">
+
+    </div>
+
+    
+
+    <script src="main.js"></script>
+</body>
+</html>
