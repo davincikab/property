@@ -50,7 +50,7 @@ var property = L.geoJSON(null, {
 //     .bindPopup(popuString);
 
 
-fetch('points.geojson')
+fetch('/static/data/points.geojson')
 .then(response => response.json())
 .then(data => {
     properties = data;
