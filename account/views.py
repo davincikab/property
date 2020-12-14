@@ -7,16 +7,18 @@ from .models import User
 # Create your views here.
 def signup(request):
     return render(request, "account/signup.html")
-    
+
 class LandlordSignUpView(CreateView):
     model = User
     form_class = LandlordSignUpForm
     template_name = "account/register.html"
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         kwargs['user_type'] = 'landlord'
+        context['title'] = "Landlord Registration"
        
-        return super().get_context_data(**kwargs)
+        return context
     
     def form_valid(self, form):
         user = form.save()
@@ -27,12 +29,14 @@ class LandlordSignUpView(CreateView):
 class AgencySignUpView(CreateView):
     model = User
     form_class = AgencySignUpForm
-    template_name = "account/register.html"
+    template_name = "account/register.html"    
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         kwargs['user_type'] = 'agency'
-       
-        return super().get_context_data(**kwargs)
+        context['title'] = "Agency Registration "
+
+        return context
     
     def form_valid(self, form):
         user = form.save()

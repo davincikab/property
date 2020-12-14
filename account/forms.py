@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 class AgencySignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "email", "password", "password2", "first_name", "last_name", "phone_number",)
+        fields = ("username", "email", "password", "password2",)
     
     def save(self):
         user = super().save(commit=False)
