@@ -16,7 +16,7 @@ var map = L.map('mapContainer',{
 
 var propertyIcon = L.divIcon({
     className:'property-marker',
-    html:"130k <div class='marker-tip'></div>"
+    html:""
 });
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='+ accessToken , {

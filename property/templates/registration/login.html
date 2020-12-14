@@ -2,14 +2,20 @@
 {% load static %}
 {% block title %} Login {% endblock %}
 {% block style %} 
-    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        .container .card {
+            min-width: 400px;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 {% endblock %}
 {% block content %}
-<div class="container">
+<div class="container my-4">
     <div class="card">
-        <div class="bg-primary text-center ">
-            <h6 class="text-white py-3 bold text-uppercase mb-0">Dekut Quick Response Force</h6>
-        </div>
         {% if form.errors %}
             <small class="text-danger">
                 Your username and password didn't match.
@@ -30,4 +36,7 @@
         </form>
     </div>
 </div>
+{% endblock %}
+{% block javascript %} 
+    <script src="{% static 'js/addControl.js' %}"></script>
 {% endblock %}
