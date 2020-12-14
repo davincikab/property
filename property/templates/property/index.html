@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin=""/>
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
 {% endblock %}
 {% block content %}
     <div class="main-container" id="container">
@@ -93,7 +94,14 @@
             </div>
 
             <div class="result-summary ml-4 mt-2">
-                <p class="my-0">8 stays found</p>
+                <div class="d-flex">
+                    <p class="my-0">8 stays found</p>
+                    <div class="menu">
+                        <i class="fa fa-list"></i>
+                        <i class="fa fa-th"></i>
+                    </div>
+                </div>
+               
                 <h4 class="my-0">Stays in selected map area</h4>
             </div>
         

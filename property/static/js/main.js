@@ -16,7 +16,7 @@ var map = L.map('mapContainer',{
 
 var propertyIcon = L.divIcon({
     className:'property-marker',
-    html:"$130k <div class='marker-tip'></div>"
+    html:"130k <div class='marker-tip'></div>"
 });
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='+ accessToken , {
@@ -76,6 +76,11 @@ function createCard(data) {
                 '<span>' + feature.properties.local_auth+'</span>'+
                 '<span>' + feature.properties.county_nam+'</span>'+
             '</div>'+
+            "<div class='d-flex'>"+
+                "<span>2 <i class='fa fa-bath'></i></span>"+
+                "<span>3 <i class='fa fa-bed'></i></span>"+
+                "<span>130 <i class='fa fa-area-chart'></i></span>"+
+            "</div>"+
        ' </figcaption>'+
         '</figure>'
     });

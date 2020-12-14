@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Property Detail {% endblock %}
+{% block style %} 
+  <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div>
+        <ol class="crumbs">
+            <li class="custom-breadcrumb-item"><a href="#">
+                <i class="fa fa-long-arrow-left"></i>
+                Back to Search</a> <i class="fa fa-chevron-right"></i>
+            </li>
+            <li class="custom-breadcrumb-item"><a href="#">Home</a> <i class="fa fa-chevron-right"></i></li>
+            <li class="custom-breadcrumb-item"><a href="#">Library</a> <i class="fa fa-chevron-right"> </i></li>
+            <li class="custom-breadcrumb-item active" aria-current="page">Data <i class="fa fa-chevron-right"></i></li>
+        </ol>
+    </div>
+    <div class="row" id="image-section" >
+        <div class="col-md-9">
+            <img src="/media/prop.webp" alt="" class="img-fluid img-cust" >
+        </div>
+        <div class="col-md-3">
+            <img src="/media/prop.webp" alt="" class="img-fluid img-sm" >
+            <img src="/media/prop.webp" alt="" class="img-fluid img-sm mt-3" >
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-8 px-0">
+            <div class="d-flex">
+                <div>
+                    <h4 class="title">22236 Woodborn Dr</h4>
+                    <p class="my-0"> <i class="fa fa-map-marker"></i> Ngong Road, Kajiado County</p>
+                    <div class='d-flex px-0'>
+                        <span class="mr-2"><i class='fa fa-bath '></i> 2 Baths</i></span>
+                        <span class="mx-2"><i class='fa fa-bed '></i> 3 Beds</span>
+                        <span class="mx-2"><i class='fa fa-area-chart '></i> 130 sqft</i></span>
+                    </div>
+                </div>
+
+                <div class="">
+                    <h5 class="title">Ksh 80000</h5>
+                </div>
+
+                <div class="">
+                    <h5 class="title">Ksh 80000</h5>
+                </div>
+            </div>
+
+            <div class="description px-3 my-4">
+                <div class="title-md h5">Local Information</div>
+                <div class="d-flex px-0">
+                    <div class="info">
+                        <img src="/media/map.jpg" alt="" class="">
+                        <div class="section-description">
+                            <div class="title-md">Map</div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <img src="/media/map.jpg" alt="" class="">
+                        <div class="section-description">
+                            <div class="title-md">Crime</div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <img src="/media/map.jpg" alt="" class="">
+                        <div class="section-description">
+                            <div class="title-md">Schools</div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <img src="/media/map.jpg" alt="" class="">
+                        <div class="section-description">
+                            <div class="title-md">Commute</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="description px-3">
+                <div class="title-md h5">Description</div>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sodales justo tellus, ac porta mi consequat eu.
+                Nam laoreet ullamcorper magna, fringilla luctus dolor imperdiet in. Etiam aliquet scelerisque auctor.
+                Curabitur nec diam eget lectus tempor dignissim eget nec sem. Praesent consectetur pellentesque augue.
+                Donec pulvinar placerat risus, a finibus mi placerat sed. 
+                Suspendisse mattis cursus leo, et suscipit nisi sollicitudin eget. Mauris auctor orci ipsum,
+            </div>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+
+    <!-- modal -->
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
