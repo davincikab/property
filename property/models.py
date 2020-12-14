@@ -83,3 +83,6 @@ class PropertyImage(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse("Image_detail", kwargs={"pk": self.pk})
+
+
+# Property information
