@@ -45,11 +45,19 @@ body {
     justify-content: center;
 }
 
-/* footer */
-.footer {
-    /* height: 200px;
-    position: absolute;
-    bottom: 0px;
-    width: 100%; */
+.title {
+  text-decoration: none;
+  color:var(--black)
 }
 
+.title:hover {
+    color:var(--primary-color);
+    text-decoration: none;
+}
+
+@media (min-width:50em) {
+    .collapse {
+        display: flex;
+        justify-content: space-between;
+    }
+}

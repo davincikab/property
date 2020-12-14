@@ -11,7 +11,7 @@ var filterSection = document.getElementById("filter-section");
 
 var map = L.map('mapContainer',{
     zoom:12,
-    center:{lat: -1.3015962548609594, lng: 36.8284034729004}
+    center:{lat: -1.4041005485564289, lng: 36.72112131585477}
 });
 
 var propertyIcon = L.divIcon({
@@ -50,7 +50,7 @@ var property = L.geoJSON(null, {
 //     .bindPopup(popuString);
 
 
-fetch('/static/data/points.geojson')
+fetch('/property-data/')
 .then(response => response.json())
 .then(data => {
     properties = data;
@@ -67,19 +67,19 @@ function createCard(data) {
     let cardListString = "";
 
     data.forEach((feature) => {
-        let index = feature.properties.objectid;
+        let index = feature.properties.pk;
         cardListString += '<figure class="card-item">'+
         '<img src="https://unsplash.it/id/'+ index +'/300/200" class="img" alt="Place name">'+
         '<figcaption class="ml-3">'+
-            "<h2>"+ feature.properties['elec_area_'] + "</h2>"+
+            "<h2><a href='/detail/" + feature.properties.slug +"' class='title'>" + feature.properties.title + "</a></h2>"+
             '<div class="details-section">'+
-                '<span>' + feature.properties.local_auth+'</span>'+
-                '<span>' + feature.properties.county_nam+'</span>'+
+                '<span>' + feature.properties.location+'</span>'+
+                '<span class="bold"> Ksh. ' + feature.properties.price +'</span>'+
             '</div>'+
-            "<div class='d-flex'>"+
-                "<span>2 <i class='fa fa-bath'></i></span>"+
-                "<span>3 <i class='fa fa-bed'></i></span>"+
-                "<span>130 <i class='fa fa-area-chart'></i></span>"+
+            "<div class='d-flex px-0'>"+
+                "<span>"+ feature.properties.baths +" <i class='fa fa-bath'></i></span>"+
+                "<span>"+ feature.properties.beds +" <i class='fa fa-bed'></i></span>"+
+                "<span>13"+ feature.properties.square_feet +" <i class='fa fa-area-chart'></i></span>"+
             "</div>"+
        ' </figcaption>'+
         '</figure>'

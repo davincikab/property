@@ -45,5 +45,6 @@ class AgencySignUpView(CreateView):
    
 
 # profile view
-
+def profile(request):
+    return render(request, "account/user_profile.html")
 

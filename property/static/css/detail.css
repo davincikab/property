@@ -1,5 +1,5 @@
 .container {
-    margin-top: 80px;
+    margin-top: 10px;
 }
 .crumbs {
      list-style: none;
@@ -49,4 +49,9 @@
     width: 140px;
     border-radius: 4px;
     box-shadow: 1px 1px 0.1em #ddd;
+}
+
+.footer {
+    height: 100px;
+    width: 100%;
 }
