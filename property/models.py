@@ -11,18 +11,18 @@ class Property(models.Model):
     )
 
     BEDROOMS = (
-        (0, 'Bed Sitter'),
-        (1, 'One Bedroom'),
-        (2, 'Two Bedroom'),
-        (3, 'Three Bedroom'),
-        (4, 'Four Bedroom'),
-        (5, 'Five Bedroom'),
+        ('Bed Sitter', 'Bed Sitter'),
+        ('One Bedroom', 'One Bedroom'),
+        ('Two Bedroom', 'Two Bedroom'),
+        ('Three Bedroom', 'Three Bedroom'),
+        ('Four Bedroom', 'Four Bedroom'),
+        ('Five Bedroom', 'Five Bedroom'),
     )
 
     BATHROOM = (
-        (1, '1 Baths'),
-        (2, '2 Baths'),
-        (3, '3 Baths')
+        ('1 Baths', '1 Baths'),
+        ('2 Baths', '2 Baths'),
+        ('3 Baths', '3 Baths')
     )
 
     HOME_TYPE = (
@@ -31,7 +31,7 @@ class Property(models.Model):
         ('Sold', 'Sold')
     )
 
-    title = models.CharField("Title", max_length=70)
+    title = models.CharField("Title", max_length=250)
     description = models.TextField("Description")
     location = models.CharField("Location", max_length=150)
     geom = models.PointField("")
@@ -42,7 +42,7 @@ class Property(models.Model):
     baths = models.CharField("Beds",  max_length=50, choices=BATHROOM)
     square_feet = models.IntegerField("Square Feet")
     is_furnished = models.BooleanField('Furnished', default=False)
-    slug = models.SlugField("Slug Field")
+    slug = models.SlugField("Slug Field", blank=True)
     posted = models.DateTimeField("Posted", auto_now=True)
 
     class Meta:
@@ -70,7 +70,7 @@ class PropertyImage(models.Model):
         verbose_name_plural = "Property Images"
 
     def __str__(self):
-        return self.property.name
+        return self.property.title
 
     def save(self,*args, **kwargs):
         super().save(*args, **kwargs)
