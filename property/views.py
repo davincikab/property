@@ -2,20 +2,46 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.core.serializers import serialize
 from django.utils.text import slugify
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # 3rd party imports
 
 # local import
-from .models import Property
+from .models import Property, PropertyImage
 from .forms import PropertyForm
 
 
 def home(request):
     return render(request, 'property/index.html', {'section':'home'})
 
+def filter_property(request):
+    if request.GET.get('query'):
+        query = request.GET.get('query')
+        houses = Property.objects.prefetch_related("property").filter(title__icontains= query)
+    else:
+        houses = Property.objects.prefetch_related("property").all()
+    
+    paginator = Paginator(houses, 2)
+    page = request.GET.get('page')
+    houses = paginator.get_page(page)
+
+    # paginator object
+    return render(request, "property/property_list.html", {'houses': houses})
+
 def detail_view(request, title):
     property = get_object_or_404(Property, slug=title)
-    return render(request, 'property/property_detail.html', {'section':'home', 'property':property})
+    house = Property.objects.prefetch_related("property").filter(slug=title)
+    print(house[0].property.all())
+
+    # print(house)
+    # print(serialize('json', house))
+    context = {
+        'section':'home', 
+        'property':property,
+        'images':house[0].property.all()
+    }
+
+    return render(request, 'property/property_detail.html', context)
 
 def get_property(request):
     property_data = serialize('geojson', Property.objects.all())
@@ -27,9 +53,18 @@ def create_property(request):
 
         form = PropertyForm(data=request.POST)
         if form.is_valid():
-            form.save()
-            print("Creating")
-            slug = slugify(form.cleaned_data['title'])
+            house_form = form.save(commit=False)
+
+            slug = slugify(house_form.title + str(house_form.pk))
+            house_form.slug
+            house_form.save()
+
+            files = request.FILES.getlist('images')
+            for image_file in files:
+                image = PropertyImage(house=house_form, image=image_file)
+                image.save()
+
+            
             return redirect('/detail/'+ slug)
     else:
         form = PropertyForm()
@@ -43,13 +78,27 @@ def update_property(request, title):
         form = PropertyForm(instance=house, data=request.POST)
         if form.is_valid():
             form.save()
+
             print("Saving")
+            # get the files 
+            files = request.FILES.getlist('images')
+            for image_file in files:
+                image = PropertyImage(house=house, image=image_file)
+                image.save()
+
             return redirect('/detail/'+ house.slug)
     else:
         form = PropertyForm(instance=house)
 
     return render(request, 'property/create_property.html',{'section':'Update Property', 'form':form})
 
-def delete_property(request):
-    return render(request, 'property/delete_property.html',{'section':'Create Property'})
+def delete_property(request, title):
+    house = get_object_or_404(Property, slug=title)
+
+    if request.method == "POST":
+        house.delete()
+        print('Deleted object')
+
+        return redirect("home")
+    return render(request, 'property/delete_property.html',{'section':'Delete Property', 'property':house})
 

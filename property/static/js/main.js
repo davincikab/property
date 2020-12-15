@@ -38,7 +38,9 @@ var property = L.geoJSON(null, {
         "<span>2 <i class='fa fa-bath'></i></span>"+
         "<span>3 <i class='fa fa-bed'></i></span>"+
         "<span>130 <i class='fa fa-area-chart'></i></span>"+
-        "</div>";
+        "</div>"+
+        "<p class='my-1 px-2'> Ksh "+ feature.properties.price +"</p>"+
+        "<p class='my-1 px-2'>"+ feature.properties.location +"</p>";
 
         layer.bindPopup(popupString);
     },
@@ -57,11 +59,15 @@ fetch('/property-data/')
     property.addData(data);
 
     // display the first 20 
-    createCard(properties.features.slice(0, 20));
+    // createCard(properties.features.slice(0, 20));
 })
 .catch(error => {
     console.error(error);
 });
+
+// get listing
+getListing("/filter-property?page=1");
+
 
 function createCard(data) {
     let cardListString = "";
@@ -79,7 +85,7 @@ function createCard(data) {
             "<div class='d-flex px-0'>"+
                 "<span>"+ feature.properties.baths +" <i class='fa fa-bath'></i></span>"+
                 "<span>"+ feature.properties.beds +" <i class='fa fa-bed'></i></span>"+
-                "<span>13"+ feature.properties.square_feet +" <i class='fa fa-area-chart'></i></span>"+
+                "<span>"+ feature.properties.square_feet +" <i class='fa fa-area-chart'></i></span>"+
             "</div>"+
        ' </figcaption>'+
         '</figure>'
@@ -100,6 +106,43 @@ mapToggler.addEventListener('click', function(e) {
 filterToggler.addEventListener('click', function(e) {
     filterSection.classList.toggle("collapse-section");
 });
+
+$('#look-for').on("click", function(e) {
+    let value = $("#query").val();
+    let url = "/filter-property?page=1&query=" + value;
+    getListing(url);
+})
+
+function getListing(url) {
+    fetch(url,  { responseType:'text'})
+    .then(res =>res.text())
+    .then(data => {
+        // console.log(data);
+        cardList.innerHTML = data;
+
+        getPaginator();
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+// paginator
+function getPaginator() {
+    let paginators = document.querySelectorAll(".paginator");
+    
+    console.log(paginators);
+    paginators.forEach(paginator => {
+        $(paginator).on("click", function(e) {
+            e.preventDefault();
+
+            let url = "/filter-property" + paginator.getAttribute("href");
+            console.log(url);
+            
+            getListing( url);
+        });
+    })
+}
 
 // TODO: Toggle filter section: bed, bathroom, price, 
 // Marker cluster

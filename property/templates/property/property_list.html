@@ -1,0 +1,24 @@
+{% load thumbnail %}
+
+{% for property in houses %}
+<figure class="card-item">
+    {% with images=property.property.all%}
+        <img src="{% thumbnail images.0.image 400x0 %}" class="img" alt="Place name">
+    {% endwith %}
+
+    <figcaption class="ml-3">
+        <h2><a href="/detail/{{ property.slug }}" class='title'> {{ property.title }} </a></h2>
+        <div class="details-section">
+            <span> {{ property.location }}</span>
+            <span class="bold"> Ksh. {{ property.price }}</span>
+        </div>
+        <div class='d-flex px-0'>
+            <span>{{ property.baths }} <i class='fa fa-bath'></i></span>
+            <span>{{ property.beds }} <i class='fa fa-bed'></i></span>
+            <span>{{ property.square_feet }} <i class='fa fa-area-chart'></i></span>
+        </div>
+    </figcaption>
+</figure>
+{% endfor %}
+
+{% include "property/pagination.html" with page=houses %}

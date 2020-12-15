@@ -1,0 +1,32 @@
+<div class="pagination d-flex" style="justify-content: center; align-items: center; flex-direction: column;">
+    <div class="step-links w-50 d-flex space-between">
+        {% if page.has_previous %}
+        <ul class="pagination my-0">
+            <li class="page-item">
+                <a href="?page={{ page.previous_page_number }}" class="paginator page-link">Previous</a>
+            </li>
+        </ul>
+        {% endif %}
+        <span class="current mt-2">
+            Page {{ page.number }} of {{ page.paginator.num_pages }}.
+        </span>
+        {% if page.has_next %}
+        <ul class="pagination my-0">
+            <li class="page-item">
+                <a href="?page={{ page.next_page_number }}" class="paginator page-link">Next</a>
+            </li>
+        </ul>
+        {% endif %}
+    </div>
+    <p class="my-0">Showing {{ page.paginator.per_page }} items of {{page.paginator.count }} </p>
+</div>
+
+<!-- <nav class="pagination-section" aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav> -->

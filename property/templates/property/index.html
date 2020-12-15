@@ -16,30 +16,30 @@
 
                 <div class="filter px-2 py-2">
                     <div class="form-row mt-3">
-                        <div class="col-md-3">
-                            <select class="custom-select">
+                        <!-- <div class="col-md-3"> -->
+                            <!-- <select class="custom-select">
                                 <option selected value="buy">Buy</option>
                                 <option value="1">To rent</option>
                                 <option value="2">Professional to Buy</option>
                                 <option value="3">Property to Rent</option>
-                            </select>
-                        </div>
-                        <div class="col-md-8">
+                            </select> -->
+                        <!-- </div> -->
+                        <div class="col-md-11">
                           <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white">
                                     <i class="fa fa-search"></i>
                                 </span>
                             </div>
-                            <input type="text" class="form-control border-none" placeholder="Search Address ...">
+                            <input type="text" id="query" class="form-control border-none" placeholder="Search Address ..." name="query">
                             <div class="input-group-append">
-                                <span class="input-group-text bg-brand">Look for</span>
+                                <button type="submit" class="input-group-text bg-brand" id="look-for">Look for</button>
                             </div>
                           </div>
                         </div>
                     </div>
 
-                    <div class="form-row mt-2">
+                    <div class="form-row mt-2 d-none" >
                         <div class="col-md-3">
                             <select class="custom-select" id="property-item">
                                 <option selected value="buy">Type of Property</option>
@@ -95,29 +95,21 @@
 
             <div class="result-summary ml-4 mt-2">
                 <div class="d-flex px-0">
-                    <p class="my-0">8 stays found</p>
-                    <div class="menu">
+                    <p class="my-0">8 houses found</p>
+                    <div class="menu mx-2">
+                        
+
                         <i class="fa fa-list"></i>
                         <i class="fa fa-th"></i>
                     </div>
                 </div>
                
-                <h4 class="my-0">Stays in selected map area</h4>
+                <h4 class="my-0">Houses in selected map area</h4>
             </div>
         
             <div id="card-list" class="card-list">
             </div>
-
-            <!-- pagination -->
-            <nav class="pagination-section" aria-label="Page navigation example">
-                <ul class="pagination">
-                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+           
 
             <!-- People also searched for -->
             <div class="container-fluid bg-light">
@@ -138,6 +130,13 @@
             <input type="checkbox" name="toggle-map" id="map-toggler">
             <label for="toggle-map">Toggle Map</label>
         </div>
+
+        {% if user.is_authenticated and user.is_agency %}
+            <a href="{% url 'create-property' %}" class="btn-add"> 
+                <i class="fa fa-plus"></i>
+            </a>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}

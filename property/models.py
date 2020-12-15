@@ -20,9 +20,9 @@ class Property(models.Model):
     )
 
     BATHROOM = (
-        ('1 Baths', '1 Baths'),
-        ('2 Baths', '2 Baths'),
-        ('3 Baths', '3 Baths')
+        ('1', '1 Baths'),
+        ('2', '2 Baths'),
+        ('3', '3 Baths')
     )
 
     HOME_TYPE = (
@@ -38,8 +38,8 @@ class Property(models.Model):
     property_type = models.CharField("Property Type", max_length=50)
     price = models.IntegerField("Price")
     year_built = models.DateField("Year Built", auto_now=False, auto_now_add=False)
-    beds = models.CharField("Beds",  max_length=50, choices=BEDROOMS)
-    baths = models.CharField("Baths",  max_length=50, choices=BATHROOM)
+    beds = models.IntegerField("Beds",  max_length=50, default=1)
+    baths = models.IntegerField("Baths",  max_length=50, default=1)
     square_feet = models.IntegerField("Square Feet")
     is_furnished = models.BooleanField('Furnished', default=False)
     slug = models.SlugField("Slug Field", blank=True)
@@ -62,7 +62,7 @@ class Property(models.Model):
     #     return reverse("Property_detail", kwargs={"pk": self.pk})
 
 class PropertyImage(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    house = models.ForeignKey(Property, related_name="property", on_delete=models.CASCADE)
     image = models.ImageField("image", upload_to="property/%Y", default="/property/grayscale.jpg")
 
     class Meta:
@@ -70,7 +70,7 @@ class PropertyImage(models.Model):
         verbose_name_plural = "Property Images"
 
     def __str__(self):
-        return self.property.title
+        return self.house.title
 
     def save(self,*args, **kwargs):
         super().save(*args, **kwargs)

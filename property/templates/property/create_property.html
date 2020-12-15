@@ -5,12 +5,12 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin=""/>
-<link rel="stylesheet" href="{% static 'css/footer.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'css/footer.css' %}"> -->
 <link rel="stylesheet" href="{% static 'css/updateform.css' %}">
 {% endblock %}
 {% block content %}
 <div class="container">
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <h5>{{ section }}</h5>
         <div id="property-location" class="d-none">
             {{ form.geom.value }}
@@ -43,6 +43,12 @@
 
                 <input type="text" name="geom" value="{{ form.geom.value }}" class="form-control form-control-sm my-2" id="id_geom">
                 <input type="text" name="property_type" value="{{ form.property_type.value }}" class="form-control form-control-sm my-2 d-none" id="id_property_type">
+                
+                <div class="py-1">
+                    <label class="" for="customFile">Choose file</label>
+                    <input type="file" name="images" id="customFile" multiple accept=".jpg, .png">
+                  
+                </div>
             </div>
             <div class="col">
                 
@@ -50,7 +56,7 @@
                 {{ form.description }}
 
                 <!-- map section -->
-                <div class="my-2" id="map" style="width: 100%; height:200px">
+                <div class="my-2" id="map" style="width: 100%; height:270px">
 
                 </div>
             </div>

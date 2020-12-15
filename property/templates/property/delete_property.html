@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Property Detail {% endblock %}
+{% block style %} 
+  
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h5>{{ section }}</h5>
+    <p>Are sure you want to delete property <b>{{ property.title }} </b> located in <span>{{ property.location }}</span></p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    </form>
+    <!-- modal -->
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
