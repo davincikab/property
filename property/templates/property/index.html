@@ -97,10 +97,8 @@
                 <div class="d-flex px-0">
                     <p class="my-0">8 houses found</p>
                     <div class="menu mx-2">
-                        
-
-                        <i class="fa fa-list"></i>
-                        <i class="fa fa-th"></i>
+                        <i class="fa fa-list display-mode active" data-mode="list"></i>
+                        <i class="fa fa-th display-mode" data-mode="table"></i>
                     </div>
                 </div>
                
@@ -128,7 +126,7 @@
 
         <div class="toggle-map">
             <input type="checkbox" name="toggle-map" id="map-toggler">
-            <label for="toggle-map">Toggle Map</label>
+            <label for="toggle-map" class="my-0">Toggle Map</label>
         </div>
 
         {% if user.is_authenticated and user.is_agency %}

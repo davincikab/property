@@ -21,7 +21,7 @@ def filter_property(request):
     else:
         houses = Property.objects.prefetch_related("property").all()
     
-    paginator = Paginator(houses, 2)
+    paginator = Paginator(houses, 20)
     page = request.GET.get('page')
     houses = paginator.get_page(page)
 

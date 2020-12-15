@@ -144,9 +144,25 @@ function getPaginator() {
     })
 }
 
+
+// toggle list and box mode
+let displayModes = document.querySelectorAll(".display-mode");
+displayModes.forEach(displayMode => {
+    $(displayMode).on('click', function(e) {
+        displayModes.forEach(displayMode =>  displayMode.classList.remove("active"));
+
+        if(displayMode.classList.contains("fa-list")) {
+            cardList.classList.remove("table-view");
+            displayMode.classList.add("active");
+            return;
+        }
+
+        displayMode.classList.add("active");
+        cardList.classList.add("table-view");
+    });
+});
+
 // TODO: Toggle filter section: bed, bathroom, price, 
 // Marker cluster
 // Active element and scroll to
-// pagination
 // spinner
-// Map toggler
