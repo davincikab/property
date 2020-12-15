@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Landlord Registration {% endblock %}
+{% block style %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+<link rel="stylesheet" href="{% static 'css/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/updateform.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form action="" method="post">
+        <h5>{{ section }}</h5>
+        <div id="property-location" class="d-none">
+            {{ form.geom.value }}
+        </div>
+        {{ form.errors }}
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+
+                {{ form.location.label_tag }}
+                {{ form.location }}
+
+                {{ form.beds.label_tag }}
+                {{ form.beds }}
+
+                {{ form.baths.label_tag}}
+                {{ form.baths }}
+
+                {{ form.price.label_tag}}
+                {{ form.price }}
+
+                {{ form.square_feet.label_tag}}
+                {{ form.square_feet }}
+
+                {{ form.year_built.label_tag}}
+                {{ form.year_built }}
+
+
+                <input type="text" name="geom" value="{{ form.geom.value }}" class="form-control form-control-sm my-2" id="id_geom">
+                <input type="text" name="property_type" value="{{ form.property_type.value }}" class="form-control form-control-sm my-2 d-none" id="id_property_type">
+            </div>
+            <div class="col">
+                
+                {{ form.description.label_tag}}
+                {{ form.description }}
+
+                <!-- map section -->
+                <div class="my-2" id="map" style="width: 100%; height:200px">
+
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-3 w-100">Submit</button>
+    </form>
+</div>   
+{% endblock %}
+{% block javascript %} 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="{% static 'js/addControl.js' %}"></script>
+    <script src="{% static 'js/createupdate.js' %}"></script>
+{% endblock %}

@@ -39,7 +39,7 @@ class Property(models.Model):
     price = models.IntegerField("Price")
     year_built = models.DateField("Year Built", auto_now=False, auto_now_add=False)
     beds = models.CharField("Beds",  max_length=50, choices=BEDROOMS)
-    baths = models.CharField("Beds",  max_length=50, choices=BATHROOM)
+    baths = models.CharField("Baths",  max_length=50, choices=BATHROOM)
     square_feet = models.IntegerField("Square Feet")
     is_furnished = models.BooleanField('Furnished', default=False)
     slug = models.SlugField("Slug Field", blank=True)
@@ -51,7 +51,7 @@ class Property(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title + str(self.pk))
         super().save(*args, **kwargs)
 
     def __str__(self):
