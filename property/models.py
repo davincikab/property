@@ -151,10 +151,17 @@ class Tenants(models.Model):
     #     return reverse("Tenants_detail", kwargs={"pk": self.pk})
 
 class RentPayment(models.Model):
+    PAYMENT_MODE = (
+        ("MPESA","M-PESA"),
+        ("CASH", "CASH"),
+        ("BANK", "BANK")
+    )
+
     receipt_number = models.CharField(blank=True, max_length=8)
     tenant = models.ForeignKey(Tenants, on_delete=models.CASCADE)
     amount_payed = models.IntegerField("Amount Paid")
     paid_on = models.DateTimeField("Payment Date", auto_now=True)
+    payment_mode = models.CharField("Payment Mode", max_length=50, choices=PAYMENT_MODE)
 
     class Meta:
         verbose_name = "RentPayment"
