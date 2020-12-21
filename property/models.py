@@ -14,6 +14,7 @@ class Apartment(models.Model):
     owner = models.ForeignKey(Landlord, related_name="landlord", on_delete=models.CASCADE)
     house_types = models.CharField("House Types", max_length=120)
     occupied_units = models.IntegerField("Occupied Units", default=0)
+    apartment_image = models.ImageField(upload_to="apartments/%Y/", default="apartment.jpg", blank=True)
 
     class Meta:
         verbose_name = "Apartment"
@@ -21,6 +22,16 @@ class Apartment(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self,*args, **kwargs):
+        super().save(*args, **kwargs)
+
+        size = (763, 508)
+        img = Image.open(self.apartment_image)
+        if img.height > 508 or img.width > 763:
+            img.thumbnail(size)
+            img.save(self.apartment_image.path)
+
     
     def get_empty_units(self):
         return self.units - self.occupied_units

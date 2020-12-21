@@ -2,12 +2,112 @@
 {% load static %}
 {% block title %} Property {% endblock %}
 {% block style %} 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
 <style>
+    #map {
+        height: 80vh;
+        width: 100%;
+    }
 
+    .apartment-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+        grid-template-rows: max-content;
+        grid-gap: 10px;
+        padding: 1.25em;
+    }
+
+    .card {
+        height: 200px;
+        width: 100%;   
+        background: transparent;
+        overflow: hidden;
+    }
+
+    img {
+        height: 200px;
+        width:100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        z-index: -1;   
+    }
+
+    .card h5  {
+        margin: 0;
+        background-color: #545b62a6;;
+        padding: 0.3em;
+        position: relative;
+    }
+
+    h5 a {
+        text-decoration: none;
+        color:var(--light-gray);
+        font-size: 0.9em;
+    }
+
+    h5 a:hover {
+        text-decoration: none;
+        color:var(--brand-color)
+    }
+
+    .card-body {
+        background-color: #333333af;
+        color: var(--white);
+        height: 26px;
+        overflow: hidden;
+        display: block;
+        position: absolute;
+        width: 26px;
+        border-radius: 0 50% 0 0;
+        bottom: 0%;
+        transition: 1.5s all;
+        padding: 0;
+    }
+
+    .card-body .apartment-detail {
+        display: none;
+    }
+
+    .card:hover .card-body {
+        height: 100%;
+        width: 100%;
+        bottom: -18%;
+        padding: 1.25em;
+        border-radius: 0%;
+    }
+
+    .card:hover .card-body .apartment-detail {
+        display: block;
+    }
+
+    .card:hover .card-body .info {
+         top: 1%;
+         right: 2%;
+    }
+
+    .card-body p {
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card-body p span {
+        font-weight: 600;
+    }
+    .card-body .info {
+        position: absolute;
+        position: absolute;
+        top: 5%;
+        right: 30%;
+    }
 </style>
 {% endblock %}
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <h5>Apartments</h5>
 
     <form class="form-inline my-2 my-lg-0">
@@ -16,17 +116,41 @@
     </form>
 
     <div class="row my-3">
-        <div class="col-md-6">
+        <div class="col-md-6 apartment-list" >
             {% for apartment in apartments %}
                 <div class="card">
                     <h5>
                         <a href="{% url 'apartment-detail' apartment.pk %}" class="">{{ apartment.name }}</a>
                     </h5>
+
+                    <img src="/media/{{ apartment.apartment_image }}" alt="{{ apartment.name }}" class="img-sm">
+
+                    
+                    <div class="card-body">
+                        <div class="info">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+
+                        <div class="apartment-detail">
+                            <p><span>Owner</span> {{ apartment.owner | title }}</p>
+                            <p><span>Units</span> {{ apartment.units }}</p>
+                            <p><span>Location</span> {{ apartment.location }}</p>
+                            <p><span>Available Units</span> {{ apartment.get_empty_units}}</p>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <div class="map" id="map"></div>
+        </div>
     </div>
-    
 </div>
+{% endblock %}
+{% block javascript %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    
+    <script src="{% static 'js/apartments/list.js' %}"></script>
 {% endblock %}
