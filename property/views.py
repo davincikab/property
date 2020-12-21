@@ -107,16 +107,39 @@ def delete_property(request, title):
 # Apartments 
 def list_apartment(request):
     apartment = Apartment.objects.all()
-
     context = {
         'section':'apartments',
         'apartments':apartment
     }
-    return render(request, "property/apartment/apartments_list.html", context)
+    return render(request, "property/apartment/apartments.html", context)
+
+def filter_apartment(request):
+    if request.GET.get('q'):
+        query = request.GET.get('q')
+        apartments = Apartment.objects.filter(name__icontains=query)
+    else:
+        apartments = Apartment.objects.filter(name__icontains=query)
+    
+    # pagination
+    paginator = Paginator(apartments)
+    page = request.GET.get('page')
+    apartments = paginator.get_page(page)
+
+    return render(request, "property/apartment/apartments_list.html", {"apartments", apartments})
+
 
 class ApartmentDetailView(DetailView):
     model = Apartment
-    template_name = "property/apartment/apartments_list.html.html"
+    template_name = "property/apartment/apartments_detail.html.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(self.get_object())
+
+        # context["property"] = Property.objects.filter(apartment=self.) 
+        # context['tenants'] = Tenants.objects.filter(apartment=)
+        return context
+    
 
 # crud list
 def create(request):
