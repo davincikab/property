@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Property {% endblock %}
+{% block style %} 
+<style>
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h5>Apartments</h5>
+
+    <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2 w-50" type="search" placeholder="Search" aria-label="Search" name="query">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+    <div class="row my-3">
+        <div class="col-md-6">
+            {% for apartment in apartments %}
+                <div class="card">
+                    <h5>
+                        <a href="{% url 'apartment-detail' apartment.pk %}" class="">{{ apartment.name }}</a>
+                    </h5>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-6"></div>
+    </div>
+    
+</div>
+{% endblock %}

@@ -3,11 +3,12 @@ from django.http import HttpResponse
 from django.core.serializers import serialize
 from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import DetailView
 
 # 3rd party imports
 
 # local import
-from .models import Property, PropertyImage
+from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
 from .forms import PropertyForm
 
 
@@ -102,3 +103,42 @@ def delete_property(request, title):
         return redirect("home")
     return render(request, 'property/delete_property.html',{'section':'Delete Property', 'property':house})
 
+
+# Apartments 
+def list_apartment(request):
+    apartment = Apartment.objects.all()
+
+    context = {
+        'section':'apartments',
+        'apartments':apartment
+    }
+    return render(request, "property/apartment/apartments_list.html", context)
+
+class ApartmentDetailView(DetailView):
+    model = Apartment
+    template_name = "property/apartment/apartments_list.html.html"
+
+# crud list
+def create(request):
+    pass
+
+def update(request):
+    pass
+
+def delete(request):
+    pass
+
+# Tenants
+def list_tenants(request):
+    tenants = Tenants.objects.all()
+
+    context = {
+        'section':'tenants',
+        'tenants':tenants
+    }
+
+    return render(request, "property/tenants/tenants_list.html", context)
+
+# RentPayments
+def list_rentpayment(request):
+    return render(request, "property/rentpayment_list.html")
