@@ -111,21 +111,21 @@ def list_apartment(request):
         'section':'apartments',
         'apartments':apartment
     }
-    return render(request, "property/apartment/apartments.html", context)
+    return render(request, "property/apartment/apartments_list.html", context)
 
 def filter_apartment(request):
     if request.GET.get('q'):
         query = request.GET.get('q')
         apartments = Apartment.objects.filter(name__icontains=query)
     else:
-        apartments = Apartment.objects.filter(name__icontains=query)
+        apartments = Apartment.objects.all()
     
     # pagination
-    paginator = Paginator(apartments)
+    paginator = Paginator(apartments, 2)
     page = request.GET.get('page')
     apartments = paginator.get_page(page)
 
-    return render(request, "property/apartment/apartments_list.html", {"apartments", apartments})
+    return render(request, "property/apartment/apartments.html", {"apartments":apartments})
 
 
 class ApartmentDetailView(DetailView):

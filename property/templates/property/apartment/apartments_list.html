@@ -116,8 +116,8 @@
     </form>
 
     <div class="row my-3">
-        <div class="col-md-6 apartment-list" >
-            {% for apartment in apartments %}
+        <div class="col-md-6 apartment-list" id="aparment-list" >
+            <!-- {% for apartment in apartments %}
                 <div class="card">
                     <h5>
                         <a href="{% url 'apartment-detail' apartment.pk %}" class="">{{ apartment.name }}</a>
@@ -139,7 +139,9 @@
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+            {% endfor %} -->
+
+
         </div>
         <div class="col-md-6">
             <div class="map" id="map"></div>

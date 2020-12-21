@@ -27,3 +27,37 @@ apartments.addTo(map);
 
 // fetch data from the db
 // 
+function fetchApartments(url) {
+    fetch(url, {responseType:'text'})
+    .then(res => res.text())
+    .then(response => {
+        console.log(response);
+
+        $("#aparment-list").html(response);
+        getPaginator();
+
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+fetchApartments('/apartments-list/?page=1');
+
+// clicking or previous button
+// paginator
+function getPaginator() {
+    let paginators = document.querySelectorAll(".paginator");
+    
+    console.log(paginators);
+    paginators.forEach(paginator => {
+        $(paginator).on("click", function(e) {
+            e.preventDefault();
+
+            let url = "/apartments-list" + paginator.getAttribute("href");
+            console.log(url);
+            
+            getListing( url);
+        });
+    })
+}
