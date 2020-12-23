@@ -2,7 +2,7 @@
     --brand-color:#cf1717;
     --primary-color:#008080;
     --white:#fff;
-    --black:#121344;
+    --black:#313131;
     --light-gray:#cccccc;
     --gray:#ddd;
 }
@@ -39,6 +39,15 @@ body {
     margin:0;
 }
 
+/* text-color */
+.text-brand {
+    color:var(--brand-color) !important;
+}
+
+.text-primary {
+    color:var(--primary-color) !important;
+}
+
 .pagination-section {
     display: flex;
     align-items: center;
@@ -50,9 +59,17 @@ body {
   color:var(--black)
 }
 
-.title:hover {
+.title:hover, .link:hover {
     color:var(--primary-color);
     text-decoration: none;
+}
+
+.link {
+    color:var(--primery-color);  
+}
+
+.space-between {
+    justify-content: space-between;
 }
 
 @media (min-width:50em) {

@@ -47,7 +47,8 @@ class Property(models.Model):
         ('Sales'),
     )
 
-    BEDROOMS = (
+    HOUSE_TYPE = (
+        ('Single Rooms', 'Single Rooms'),
         ('Bed Sitter', 'Bed Sitter'),
         ('One Bedroom', 'One Bedroom'),
         ('Two Bedroom', 'Two Bedroom'),
@@ -72,7 +73,7 @@ class Property(models.Model):
     description = models.TextField("Description")
     location = models.CharField("Location", max_length=150)
     geom = models.PointField("")
-    property_type = models.CharField("Property Type", max_length=50)
+    property_type = models.CharField("Property Type", max_length=50, choices=HOUSE_TYPE)
     price = models.IntegerField("Price")
     year_built = models.DateField("Year Built", auto_now=False, auto_now_add=False)
     beds = models.IntegerField("Beds", default=1)
@@ -153,7 +154,7 @@ class Tenants(models.Model):
         verbose_name_plural = "Tenants"
 
     def __str__(self):
-        return self.name
+        return self.get_full_name()
     
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'

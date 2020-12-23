@@ -106,7 +106,6 @@ searchForm.on("submit", function(e) {
     }
 
     // fetch the data
-  
     console.log(url);
             
     fetchApartments(url);
