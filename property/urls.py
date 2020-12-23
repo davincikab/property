@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import home, detail_view, get_property, create_property, update_property, delete_property, filter_property, \
   list_tenants, list_apartment , ApartmentDetailView, filter_apartment, apartment_data, create_apartment, update_apartment, \
-  delete_apartment
+  delete_apartment, TenantDetailView, TenantsCreateView, TenantsDeleteView, TenantsUpdateView
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,6 +17,9 @@ urlpatterns = [
 
   # tenants
   path("tenants/", list_tenants, name="tenants"),
+  path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
+  # path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
+  # path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
 
   # apartments
   path("apartments/", list_apartment, name="apartments"),

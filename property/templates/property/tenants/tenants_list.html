@@ -71,7 +71,7 @@
             <div class="tenants-list">
                 {% for tenant in tenants %}
                     <div class="section mb-2 w-100">
-                        <h6><a class="link" href="#">{{ tenant.get_full_name }}</a></h6>
+                        <h6><a class="link" href="{% url 'tenants-detail' tenant.pk %}">{{ tenant.get_full_name }}</a></h6>
                         <p class="my-0 d-flex space-between"><i>Apartment</i> {{ tenant.apartment.name }}</p>
                         <p class="my-0 d-flex space-between"><i>ID Number</i> {{ tenant.id_number }}</p>
                         <p class="my-0 d-flex space-between"><i>Room Code</i> {{ tenant.room_code }}</p>
@@ -92,7 +92,7 @@
                         </div>
                     </div>
                 {% endfor %}
-                
+
                 {% include "property/pagination.html" with page=tenants %}
             </div>
         </div>

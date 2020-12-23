@@ -32,7 +32,6 @@ class Apartment(models.Model):
             img.thumbnail(size)
             img.save(self.apartment_image.path)
 
-    
     def get_empty_units(self):
         return self.units - self.occupied_units
 
@@ -152,7 +151,7 @@ class Tenants(models.Model):
     marital_status = models.CharField("Marital Status", max_length=50, choices=MARITAL_STATUS)  
     room_type = models.CharField("Room Type", max_length=50, choices=HOUSE_TYPE)
     is_active = models.BooleanField("Active Tenant")
-    location = models.PointField(srid=4326)
+    geom = models.PointField(srid=4326)
     is_paid = models.BooleanField(default=False)
 
     class Meta:

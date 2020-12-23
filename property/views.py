@@ -212,7 +212,7 @@ def list_tenants(request):
 
 class TenantDetailView(DetailView):
     model = Tenants
-    template_name = "property/tenant/tenants.html"
+    template_name = "property/tenants/tenants_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -223,7 +223,7 @@ class TenantDetailView(DetailView):
 
 class TenantsCreateView(CreateView):
     model = Tenants
-    template_name = "property/tenant/tenants_create.html"
+    template_name = "property/tenants/tenants_create.html"
     form_class = TenantsForm
 
     def form_valid(self, form):
@@ -232,7 +232,7 @@ class TenantsCreateView(CreateView):
 class TenantsUpdateView(UpdateView):
     model = Tenants
     form_class = TenantsForm
-    template_name = "property/tenant/tenants_create.html"
+    template_name = "property/tenants/tenants_create.html"
 
     def form_valid(self, form):
         pass

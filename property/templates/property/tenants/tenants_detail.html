@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Apartments {% endblock %}
+{% block style %} 
+<style>
+    .section {
+        box-shadow: 2px 2px 0.2em var(--light-gray);
+        padding:0.2em
+    }
+
+    .section p {
+        margin-bottom: 0;
+        font-weight: 500;
+    }
+    h5, h6 {
+        font-weight: 500 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %} 
+<div class="container">
+    <div class="">
+        <h4 class="text-center mt-3 mb-1">{{ object.get_full_name }}</h4>
+
+        <p class="my-0 text-center">
+            <a class="btn btn-sm btn-primary text-white" href="{% url 'update-apartments' object.pk %}"><i class="fa fa-pencil-square"></i></a>
+            <a class="btn btn-sm btn-danger text-white" href="{% url 'delete-apartments' object.pk %}"><i class="fa fa-trash"></i></a>
+        </p>
+    </div>
+   
+
+    <div class="row">
+        <!-- Current property -->
+        <div class="col-md-6">
+
+            <h5 class="text-center">Tenant Information</h5>
+            <div class="section mb-2">
+                <p>{{ object.get_full_name }}</p>  
+
+                <div class="my-1">
+                    <p>ID Number</p>  
+                    <i>{{ object.id_number }}</i>     
+                </div>
+               
+                <div class="my-1">
+                    <p>Marital Status</p>
+                    <i>{{ object.marital_status }}</i>
+                </div>
+                
+                <div class="my-1">
+                    <p>Apartment</p>
+                    <i>{{ object.apartment.name }}</i> 
+                </div>
+
+                <div class="my-1">
+                    <p>Floor</p>
+                    <i>{{ object.floor }}</i> 
+                </div>
+                
+                <div class="my-1">
+                    <p>Room Code</p>
+                    <i>{{ object.room_code }}</i>   
+                </div>   
+                
+                <div class="my-1">
+                    <p>Room Type</p>
+                    <i>{{ object.room_type }}</i> 
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Tenants -->
+        <div class="col-md-6">
+            <h5 class="text-center">Rent Payment</h5>
+            {% for payment in payments %}
+                <div class="section mb-2">
+                    <h6><a class="link" href="#">{{ payment.receipt_number }}</a></h6>
+                    <p class="d-flex space-between my-0">
+                        <small class="text-muted">{{ payment.paid_on }}</small>
+                        <small class="text-muted">Amount Paid {{ payment.amount_payed }}</small>
+                        <small class="text-muted">Mode {{ payment.payment_mode }}</small>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>    
+</div>
+{% endblock %}
+
+{% block javascript %} 
+{% endblock %}
