@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Property Detail {% endblock %}
+{% block style %} 
+  
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h5>{{ section }}</h5>
+    <p>Are sure you want to delete property <b>{{ apartment.name }} </b> located in <span>{{ apartment.location }}</span></p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a type="button" class="btn btn-primary" href="{% url 'apartment-detail' apartment.pk %}">Go Back</a>
+    </form>
+    <!-- modal -->
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

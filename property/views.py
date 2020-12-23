@@ -174,8 +174,14 @@ def update_apartment(request, pk):
     
     return render(request, "property/apartment/apartments_create_update.html",{'form':form})
 
-def delete(request):
-    pass
+def delete_apartment(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk)
+
+    if request.method == "POST":
+        apartment.delete()
+        return redirect("/apartments/")
+    
+    return render(request, "property/apartment/apartments_delete.html", {'apartment':apartment})
 
 # Tenants
 def list_tenants(request):
