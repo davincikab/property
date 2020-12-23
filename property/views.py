@@ -9,7 +9,7 @@ from django.views.generic import DetailView
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
-from .forms import PropertyForm
+from .forms import PropertyForm, ApartmentForm
 
 
 def home(request):
@@ -56,10 +56,12 @@ def create_property(request):
         if form.is_valid():
             house_form = form.save(commit=False)
 
+            # slug
             slug = slugify(house_form.title + str(house_form.pk))
             house_form.slug
             house_form.save()
 
+            # images
             files = request.FILES.getlist('images')
             for image_file in files:
                 image = PropertyImage(house=house_form, image=image_file)
@@ -134,7 +136,7 @@ def apartment_data(request):
 
 class ApartmentDetailView(DetailView):
     model = Apartment
-    template_name = "property/apartment/apartments_detail.html."
+    template_name = "property/apartment/apartments_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -147,11 +149,27 @@ class ApartmentDetailView(DetailView):
         return context 
 
 # crud list
-def create(request):
-    pass
+def create_apartment(request):
+    if request.method == "POST":
+        form = ApartmentForm(request.POST)
+        if form.is_valid:
+            form.save()
+    else:
+        form = ApartmentForm()
+    
+    return render(request, "property/apartment/apartments_create_update.html")
 
-def update(request):
-    pass
+def update_apartment(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk)
+    if request.method == "POST":
+        form = ApartmentForm(instance=apartment, request.POST, request.FILES)
+        
+        if form.is_valid:
+            form.save()
+    else:
+        form = ApartmentForm(instance=apartment)
+    
+    return render(request, "property/apartment/apartments_create_update.html")
 
 def delete(request):
     pass
