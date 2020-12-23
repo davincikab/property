@@ -1,24 +1,26 @@
-{% for apartment in apartments %}
-<div class="card">
-    <h5>
-        <a href="{% url 'apartment-detail' apartment.pk %}" class="">{{ apartment.name }}</a>
-    </h5>
+<div class="apartment-list">
+   {% for apartment in apartments %}
+    <div class="card">
+        <h5>
+            <a href="{% url 'apartment-detail' apartment.pk %}" class="">{{ apartment.name }}</a>
+        </h5>
 
-    <img src="/media/{{ apartment.apartment_image }}" alt="{{ apartment.name }}" class="img-sm">
+        <img src="/media/{{ apartment.apartment_image }}" alt="{{ apartment.name }}" class="img-sm">
 
-    
-    <div class="card-body">
-        <div class="info">
-            <i class="fa fa-info-circle"></i>
-        </div>
+        
+        <div class="card-body">
+            <div class="info">
+                <i class="fa fa-info-circle"></i>
+            </div>
 
-        <div class="apartment-detail">
-            <p><span>Owner</span> {{ apartment.owner | title }}</p>
-            <p><span>Units</span> {{ apartment.units }}</p>
-            <p><span>Location</span> {{ apartment.location }}</p>
-            <p><span>Available Units</span> {{ apartment.get_empty_units}}</p>
+            <div class="apartment-detail">
+                <p><span>Owner</span> {{ apartment.owner | title }}</p>
+                <p><span>Units</span> {{ apartment.units }}</p>
+                <p><span>Location</span> {{ apartment.location }}</p>
+                <p><span>Available Units</span> {{ apartment.get_empty_units}}</p>
+            </div>
         </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
 {% include "property/pagination.html" with page=apartments %}

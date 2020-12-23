@@ -61,7 +61,7 @@ function fetchApartments(url) {
     .then(res => res.text())
     .then(response => {
 
-        $("#aparment-list").html(response);
+        $("#apartment-list").html(response);
         getPaginator();
 
     })

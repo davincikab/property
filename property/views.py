@@ -154,22 +154,25 @@ def create_apartment(request):
         form = ApartmentForm(request.POST)
         if form.is_valid:
             form.save()
+            return redirect(f"/apartments/")
     else:
         form = ApartmentForm()
     
-    return render(request, "property/apartment/apartments_create_update.html")
+    return render(request, "property/apartment/apartments_create_update.html",{'form':form})
 
 def update_apartment(request, pk):
     apartment = get_object_or_404(Apartment, pk=pk)
     if request.method == "POST":
-        form = ApartmentForm(instance=apartment, request.POST, request.FILES)
-        
+        form = ApartmentForm(instance=apartment, data=request.POST, files=request.FILES)
+
         if form.is_valid:
             form.save()
+
+            return redirect(f"/apartments/{apartment.pk}")
     else:
         form = ApartmentForm(instance=apartment)
     
-    return render(request, "property/apartment/apartments_create_update.html")
+    return render(request, "property/apartment/apartments_create_update.html",{'form':form})
 
 def delete(request):
     pass
