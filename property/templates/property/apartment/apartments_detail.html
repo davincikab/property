@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Apartments {% endblock %}
+{% block style %} 
+{% endblock %}
+
+{% block content %} 
+<div class="conainer-fluid">
+    <h4>{{ object.name }}</h4>
+    
+    <!-- Current property -->
+    {% for property in properties %}
+        <p>{{ property.title }}</p>
+    {% endfor %}
+
+    <!-- Tenants -->
+    {% for tenant in tenants %}
+        <p>{{ tenant.get_full_name }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block javascript %} 
+{% endblock %}

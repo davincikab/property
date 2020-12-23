@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Property {% endblock %}
+{% block title %} Apartments {% endblock %}
 {% block style %} 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -104,44 +104,76 @@
         top: 5%;
         right: 30%;
     }
+    .leaflet-popup-content-wrapper {
+    border-radius: 0px                      ;
+    padding:-2px;
+}
+
+.leaflet-popup-content {
+    margin:-1px !important;
+    width: 200px !important;
+    min-width:200px;
+}
+
+.leaflet-popup-close-button {
+    mix-blend-mode: difference;
+}
+
+.popup-content {
+    width: auto;
+}
+
+.marker-tip {
+    position: absolute;
+    bottom: 0%;
+    z-index: 2;
+    left: 35%;
+    margin-bottom: -13px;
+    border: 8px solid;
+    border-color: rgb(229 153 13) transparent transparent transparent;
+}
+
+.leaflet-touch .leaflet-bar {
+    border-width: 0px !important;
+}
+
+.leaflet-touch .leaflet-bar a:first-child {
+    margin-bottom: 3px;
+}
+
+.leaflet-touch .leaflet-bar a{
+    padding: 0;
+    border-radius: 50% !important;
+    text-align: center;
+    color: var(--white);
+    font-weight: 500;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    background-color: var(--brand-color);
+    box-shadow: 2px 2px 0.2em var(--gray);
+}
+
+
+/* Util classes */
+.d-flex {
+    padding: 0.2em 1em;
+    display: flex;
+    justify-content: space-between;
+}
 </style>
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
-    <h5>Apartments</h5>
+    <h5 class="px-2">Apartments</h5>
 
-    <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2 w-50" type="search" placeholder="Search" aria-label="Search" name="query">
+    <form class="form-inline my-2 my-lg-0 px-2" id="search-form">
+        <input class="form-control mr-sm-2 w-50" type="search" placeholder="Search" aria-label="Search" name="query" id="search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
 
     <div class="row my-3">
         <div class="col-md-6 apartment-list" id="aparment-list" >
-            <!-- {% for apartment in apartments %}
-                <div class="card">
-                    <h5>
-                        <a href="{% url 'apartment-detail' apartment.pk %}" class="">{{ apartment.name }}</a>
-                    </h5>
-
-                    <img src="/media/{{ apartment.apartment_image }}" alt="{{ apartment.name }}" class="img-sm">
-
-                    
-                    <div class="card-body">
-                        <div class="info">
-                            <i class="fa fa-info-circle"></i>
-                        </div>
-
-                        <div class="apartment-detail">
-                            <p><span>Owner</span> {{ apartment.owner | title }}</p>
-                            <p><span>Units</span> {{ apartment.units }}</p>
-                            <p><span>Location</span> {{ apartment.location }}</p>
-                            <p><span>Available Units</span> {{ apartment.get_empty_units}}</p>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %} -->
-
-
         </div>
         <div class="col-md-6">
             <div class="map" id="map"></div>

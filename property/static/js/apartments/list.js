@@ -14,16 +14,45 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: accessToken
 }).addTo(map);
 
+let propertyIcon =  L.icon({
+    iconUrl:"/static/images/home.png",
+    iconSize:[28, 28]
+});
+
 var apartments = L.geoJSON(null, {
     style:function(feature) {
 
     },
-    pointToLayer:function(feature, latlng) {
+    onEachFeature:function(feature, layer) {
+        let popupString = "<div class='popup-content'><h5 class='title'>"+ feature.properties.name +"</h5>" +
+        "<p class='my-1 px-2'> <b>Location </b> "+ feature.properties.location +"</p>"+
+        "<b class='my-1 px-2'>House Types</b>"+
+        "<p class='my-1 px-2'>"+ feature.properties.house_types +"</p>"+
+        "</div>";
 
+        layer.bindPopup(popupString);
+    },
+    pointToLayer:function(feature, latlng) {
+        return L.marker(latlng, {icon:propertyIcon});
     }
 });
 
 apartments.addTo(map);
+
+// get apartments
+fetch("/apartments-data/")
+.then(res => res.json())
+.then(data => {
+    console.log(data);
+    apartments.addData(data);
+    
+    if(apartments.getBounds()._northEast) {
+        map.fitBounds(apartments.getBounds());
+    }
+})
+.catch(error => {
+    console.error(error);
+});
 
 // fetch data from the db
 // 
@@ -31,7 +60,6 @@ function fetchApartments(url) {
     fetch(url, {responseType:'text'})
     .then(res => res.text())
     .then(response => {
-        console.log(response);
 
         $("#aparment-list").html(response);
         getPaginator();
@@ -48,8 +76,7 @@ fetchApartments('/apartments-list/?page=1');
 // paginator
 function getPaginator() {
     let paginators = document.querySelectorAll(".paginator");
-    
-    console.log(paginators);
+
     paginators.forEach(paginator => {
         $(paginator).on("click", function(e) {
             e.preventDefault();
@@ -57,7 +84,30 @@ function getPaginator() {
             let url = "/apartments-list" + paginator.getAttribute("href");
             console.log(url);
             
-            getListing( url);
+            fetchApartments( url);
         });
     })
 }
+
+
+// filter
+var searchForm = $("#search-form");
+var searchField = $("#search");
+
+searchForm.on("submit", function(e) {
+    e.preventDefault();
+
+    // get the form value
+    let value = searchField.val();
+
+    let url = "/apartments-list/?page=1&query=" + value;
+    if(value == "") {
+        url = "/apartments-list/?page=1";
+    }
+
+    // fetch the data
+  
+    console.log(url);
+            
+    fetchApartments(url);
+});

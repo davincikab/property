@@ -114,32 +114,37 @@ def list_apartment(request):
     return render(request, "property/apartment/apartments_list.html", context)
 
 def filter_apartment(request):
-    if request.GET.get('q'):
-        query = request.GET.get('q')
+    if request.GET.get('query'):
+        query = request.GET.get('query')
         apartments = Apartment.objects.filter(name__icontains=query)
     else:
         apartments = Apartment.objects.all()
     
     # pagination
-    paginator = Paginator(apartments, 2)
+    paginator = Paginator(apartments, 4)
     page = request.GET.get('page')
     apartments = paginator.get_page(page)
 
     return render(request, "property/apartment/apartments.html", {"apartments":apartments})
 
+def apartment_data(request):
+    apartment = serialize('geojson', Apartment.objects.all())
+    return HttpResponse(apartment)
+
 
 class ApartmentDetailView(DetailView):
     model = Apartment
-    template_name = "property/apartment/apartments_detail.html.html"
+    template_name = "property/apartment/apartments_detail.html."
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.get_object())
+        apartment = kwargs['object']
 
-        # context["property"] = Property.objects.filter(apartment=self.) 
-        # context['tenants'] = Tenants.objects.filter(apartment=)
-        return context
-    
+        context["properties"] = Property.objects.filter(apartment=apartment) 
+        context['tenants'] = Tenants.objects.filter(apartment=apartment)
+
+        print(context)
+        return context 
 
 # crud list
 def create(request):
