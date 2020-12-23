@@ -3,13 +3,13 @@ from django.http import HttpResponse
 from django.core.serializers import serialize
 from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
 # 3rd party imports
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
-from .forms import PropertyForm, ApartmentForm
+from .forms import PropertyForm, ApartmentForm, TenantsForm
 
 
 def home(request):
@@ -183,17 +183,65 @@ def delete_apartment(request, pk):
     
     return render(request, "property/apartment/apartments_delete.html", {'apartment':apartment})
 
-# Tenants
+# ========================== Tenants
 def list_tenants(request):
     tenants = Tenants.objects.all()
+    active_tag = ""
+
+    if request.GET.get('query'):
+        query = request.GET.get('query')
+        tenants = Tenants.objects.filter(first_name__icontains = query)
+    
+    if request.GET.get('house_type'):
+        query = request.GET.get('house_type')
+        active_tag = query
+        tenants = Tenants.objects.filter(room_type__icontains = query)
+    
+    paginator = Paginator(tenants, 10)
+    page = request.GET.get('page')
+    tenants = paginator.get_page(page)
 
     context = {
         'section':'tenants',
-        'tenants':tenants
+        'tenants':tenants,
+        'house_types': ['Single Rooms', 'Bed Sitter', 'One Bedroom', 'Two Bedroom', 'Three Bedroom', 'Four Bedroom', 'Five Bedroom'],
+        'active_tag':active_tag
     }
 
     return render(request, "property/tenants/tenants_list.html", context)
 
-# RentPayments
+class TenantDetailView(DetailView):
+    model = Tenants
+    template_name = "property/tenant/tenants.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tenant = kwargs['object']
+
+        context["payments"] = RentPayment.objects.filter(tenant=tenant)
+        return context
+
+class TenantsCreateView(CreateView):
+    model = Tenants
+    template_name = "property/tenant/tenants_create.html"
+    form_class = TenantsForm
+
+    def form_valid(self, form):
+        pass
+
+class TenantsUpdateView(UpdateView):
+    model = Tenants
+    form_class = TenantsForm
+    template_name = "property/tenant/tenants_create.html"
+
+    def form_valid(self, form):
+        pass
+
+class TenantsDeleteView(DeleteView):
+    model = Tenants
+    template_name = ".html"
+    success_url = "/tenants/"
+
+# ============================== RentPayments
 def list_rentpayment(request):
     return render(request, "property/rentpayment_list.html")

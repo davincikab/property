@@ -3,11 +3,117 @@
 {% block title %} Property {% endblock %}
 {% block style %} 
 <style>
+    .tenants-list {
+        position: relative;
+    }
+    .section {
+        box-shadow: 2px 2px 0.2em var(--light-gray);
+        padding:0.2em;
+        position: relative;
+    }
+    .section > p {
+        font-size: 0.9rem;
+    }
 
+    .section span {
+        font-size: 0.8rem;
+    }
+
+    .status {
+        position: absolute;
+        top:2%;
+        right:2%;
+        border-radius: 1em;
+        padding:5px;
+    }
+
+    .bedroom-tags {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .tag {
+        box-shadow: inset 2px 2px 0.1em var(--light-gray), 
+            2px 2px 0.1em var(--light-gray);
+        margin:0.1em 0.2em;
+        padding: 0.1em 0.2em;
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+        cursor: pointer;
+        color:var(--black);
+    }
+
+    .tag:hover {
+        background-color: var(--primary-color);
+        color:var(--white);
+        transform: scale(1.1);
+        text-decoration: none;
+    }
+
+    .tag.active {
+        box-shadow: inset 2px 2px 0.1em var(--primary-color), 
+            2px 2px 0.1em var(--primary-color);
+        background-color: var(--primary-color);
+        color: white;
+    }
 </style>
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h5>Tenants</h5>
+    <h5 class="my-3 text-center">Tenants</h5>
+    <div class="row">
+        <div class="col-md-8">
+            <form class="form-inline my-2 w-100" id="search-form">
+                <input class="form-control w-75" type="search" placeholder="Search" aria-label="Search" name="query" id="search">
+                <button class="btn btn-outline-success my-2 my-sm-0 mx-1" type="submit">Search</button>
+            </form>
+
+            <div class="tenants-list">
+                {% for tenant in tenants %}
+                    <div class="section mb-2 w-100">
+                        <h6><a class="link" href="#">{{ tenant.get_full_name }}</a></h6>
+                        <p class="my-0 d-flex space-between"><i>Apartment</i> {{ tenant.apartment.name }}</p>
+                        <p class="my-0 d-flex space-between"><i>ID Number</i> {{ tenant.id_number }}</p>
+                        <p class="my-0 d-flex space-between"><i>Room Code</i> {{ tenant.room_code }}</p>
+                        <p class="my-0 d-flex space-between"><i>Floor</i> {{ tenant.floor }}</p>
+
+                       
+                        {% if tenant.is_active %}
+                            <div class="status bg-brand"></div>
+                        {% else %}
+                            <div class="status bg-light"> </div>
+                        {% endif%}
+
+                        <div class="d-flex space-between">
+                            <span><i class="fa fa-envelope text-primary mx-2"></i> {{ tenant.email }}</span>
+                            <span><i class="fa fa-phone text-primary mx-2"></i> {{ tenant.phone_number }}</span>
+                            <span><i class="fa fa-info-circle text-primary mx-2"></i> {{ tenant.room_code }}</span>
+                            <span><i class="fa fa-life-ring text-primary mx-2"></i> {{ tenant.marital_status }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                {% include "property/pagination.html" with page=tenants %}
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Filters -->
+            <h5 class="text-center my-0">Filter</h5>
+
+            <div class="filters">
+                <!-- Available tags -->
+                <h6>BEDROOMS</h6>
+                <div class="bedroom-tags d-flex">
+                    {% for house in house_types %}
+                        <a class="tag {% if house == active_tag %}active{% endif %}" href="?house_type={{house}}"> {{ house }} </a>
+                    {% endfor %}
+                </div>
+
+                <h6></h6>
+
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -12,3 +12,8 @@ class ApartmentForm(forms.ModelForm):
         model = Apartment
         fields = "__all__"
 
+class TenantsForm(forms.ModelForm):
+    
+    class Meta:
+        model = Tenants
+        fields = "__all__"

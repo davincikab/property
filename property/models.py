@@ -136,6 +136,11 @@ class Tenants(models.Model):
         ('Five Bedroom', 'Five Bedroom'),
     )
 
+    MARITAL_STATUS = (
+        ('Single', 'Single'),
+        ('Married', 'Married')
+    )
+
     first_name = models.CharField("First Name", max_length=50)
     last_name = models.CharField("Last Name", max_length=50)
     id_number = models.IntegerField("ID Number")
@@ -144,10 +149,11 @@ class Tenants(models.Model):
     floor = models.IntegerField("Floor", default=0)
     phone_number = models.CharField("Phone Number", max_length=13)
     email = models.EmailField("Email Address", blank=True)
-    marital_status = models.CharField("Marital Status", max_length=50)  
+    marital_status = models.CharField("Marital Status", max_length=50, choices=MARITAL_STATUS)  
     room_type = models.CharField("Room Type", max_length=50, choices=HOUSE_TYPE)
     is_active = models.BooleanField("Active Tenant")
     location = models.PointField(srid=4326)
+    is_paid = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Tenants"
