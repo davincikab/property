@@ -15,6 +15,7 @@ class Apartment(models.Model):
     house_types = models.CharField("House Types", max_length=120)
     occupied_units = models.IntegerField("Occupied Units", default=0)
     apartment_image = models.ImageField(upload_to="apartments/%Y/", default="apartment.jpg", blank=True)
+    slug = models.SlugField(blank=True)
 
     class Meta:
         verbose_name = "Apartment"
@@ -24,6 +25,9 @@ class Apartment(models.Model):
         return self.name
 
     def save(self,*args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            
         super().save(*args, **kwargs)
 
         size = (763, 508)
@@ -90,7 +94,7 @@ class Property(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title + str(self.pk))
+            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):

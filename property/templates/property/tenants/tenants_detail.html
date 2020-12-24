@@ -15,16 +15,19 @@
     h5, h6 {
         font-weight: 500 !important;
     }
+    .inactive {
+        color: var(--light-gray);
+    }
 </style>
 {% endblock %}
 
 {% block content %} 
-<div class="container">
+<div class="container {% if not object.is_active %} inactive {% endif %}">
     <div class="">
         <h4 class="text-center mt-3 mb-1">{{ object.get_full_name }}</h4>
 
         <p class="my-0 text-center">
-            <a class="btn btn-sm btn-primary text-white" href="{% url 'update-apartments' object.pk %}"><i class="fa fa-pencil-square"></i></a>
+            <a class="btn btn-sm btn-primary text-white" href="/tenants/{{object.apartment.slug}}/update/{{object.pk}}"><i class="fa fa-pencil-square"></i></a>
             <a class="btn btn-sm btn-danger text-white" href="{% url 'delete-apartments' object.pk %}"><i class="fa fa-trash"></i></a>
         </p>
     </div>

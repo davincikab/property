@@ -10,10 +10,9 @@ class ApartmentForm(forms.ModelForm):
     
     class Meta:
         model = Apartment
-        fields = "__all__"
+        exclude = ('slug',)
 
 class TenantsForm(forms.ModelForm):
-    
     class Meta:
         model = Tenants
         fields = "__all__"

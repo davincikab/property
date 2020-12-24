@@ -4,4 +4,8 @@ formControls.forEach(formControl => {
         formControl.classList.add('form-control');
         formControl.classList.add('form-control-sm');
     }
+    
+    if(formControl.type == "checkbox" || formControl.type == "radio") {
+        formControl.classList.add("form-check-input")
+    }
 });

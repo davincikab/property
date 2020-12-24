@@ -226,16 +226,52 @@ class TenantsCreateView(CreateView):
     template_name = "property/tenants/tenants_create.html"
     form_class = TenantsForm
 
+    extra_context = {
+        'section':"Add a Tenant"
+    }
+
+    def get(self, request, *args, **kwargs):
+        print('form initial')
+        print(kwargs['title'])
+        title = kwargs['title']
+        apartment = Apartment.objects.get(slug=title)
+
+        self.initial = {
+            'geom':apartment.geom,
+            'apartment':apartment
+        }
+
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
     def form_valid(self, form):
-        pass
+        form.save()
+        return redirect("/tenants/")
 
 class TenantsUpdateView(UpdateView):
     model = Tenants
     form_class = TenantsForm
     template_name = "property/tenants/tenants_create.html"
+    extra_context = {
+        'section':"Update Tenant Info"
+    }
 
     def form_valid(self, form):
-        pass
+        form.save()
+        tenant = self.object
+
+        print(tenant)
+        url = f"/tenants/{tenant.pk}"
+        return redirect(url)
+    
 
 class TenantsDeleteView(DeleteView):
     model = Tenants

@@ -15,11 +15,11 @@ urlpatterns = [
   path('update/<slug:title>', update_property, name="update-property"),
   path('delete/<slug:title>', delete_property, name="delete-property"),
 
-  # tenants
+  # tenants tenants/{{object.apartment.slug}}/update/{{object.pk}}
   path("tenants/", list_tenants, name="tenants"),
   path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
-  # path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
-  # path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
+  path("tenants/<slug:title>/create/", TenantsCreateView.as_view(), name="tenants-create"),
+  path("tenants/<slug:title>/update/<int:pk>/", TenantsUpdateView.as_view(), name="tenants-update"),
 
   # apartments
   path("apartments/", list_apartment, name="apartments"),
