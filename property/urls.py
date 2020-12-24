@@ -20,6 +20,7 @@ urlpatterns = [
   path("tenants/<int:pk>/", TenantDetailView.as_view(), name="tenants-detail"),
   path("tenants/<slug:title>/create/", TenantsCreateView.as_view(), name="tenants-create"),
   path("tenants/<slug:title>/update/<int:pk>/", TenantsUpdateView.as_view(), name="tenants-update"),
+  path("tenants/<slug:title>/delete/<int:pk>/", TenantsDeleteView.as_view(), name="tenants-update"),
 
   # apartments
   path("apartments/", list_apartment, name="apartments"),

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Property Detail {% endblock %}
+{% block style %} 
+  
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h5>{{ section }}</h5>
+    <p>Are sure you want to delete tenant <b>{{ tenant.get_full_name }} </b> residing in <span>{{ tenant.apartment }}</span></p>
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a type="button" class="btn btn-primary" href="{% url 'tenants-detail' tenant.pk %}">Go Back</a>
+    </form>
+    <!-- modal -->
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

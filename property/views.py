@@ -275,8 +275,9 @@ class TenantsUpdateView(UpdateView):
 
 class TenantsDeleteView(DeleteView):
     model = Tenants
-    template_name = ".html"
+    template_name = "property/tenants/tenants_delete.html"
     success_url = "/tenants/"
+    context_object_name = "tenant"
 
 # ============================== RentPayments
 def list_rentpayment(request):
