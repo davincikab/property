@@ -11,6 +11,7 @@ from django.template.loader import get_template
 from datetime import datetime
 from xhtml2pdf import pisa
 from io import BytesIO
+import os
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
@@ -307,26 +308,37 @@ def make_payment(request, title, tenant_id):
     apartment = get_object_or_404(Apartment, slug=title)
 
     current_date = timezone.now()
-    print(apartment)
-    print(tenant)
     context = {
         'tenant':tenant, 
         'apartment':apartment,
         'current_date':current_date
     }
 
-    return render(request, "property/rent/payment.html", context)
+    if request.GET.get('print') == "True":
+        pdf = render_to_pdf("property/rent/receipt.html", context)
+        print(pdf)
+        return HttpResponse(pdf, content_type='application/pdf')
 
-# receipt view
-def print_receipt(request):
-    return render(request)
+    return render(request, "property/rent/receipt.html", context)
+  
 
+def link_callback(uri, rel):
+    if not os.path.isfile(uri):
+        raise Exception('File not found')
+    return uri
+    
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
     html = template.render(context_dict)
     result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
 
-    if not pdf.error:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    # pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    pdf = pisa.CreatePDF(html, dest=response, link_callback=link_callback)
+
+    if not pdf.err:
+        # return HttpResponse(result.getvalue(), content_type='application/pdf')
+        return response
+
     return None

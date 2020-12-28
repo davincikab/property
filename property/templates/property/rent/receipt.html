@@ -1,8 +1,6 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
 {% load numbertowords %}
-{% block title %} Property {% endblock %}
 {% block style %} 
 <style>
     .container {
@@ -10,16 +8,19 @@
         align-items: center;
         display: flex;
         flex-direction: column;
-        font-size: 1rem;
+        font-size: 10px;
+        font-family:Helvetica, sans-serif ;
     }
     
-    h6 {
+    h5 {
         margin-bottom: 0em;
+        font-size: 1.5rem;
     }
+
     .header {
         align-items: center;
         margin-bottom: 0.5em;
-
+        -pdf-keep-with-next: true;
     }
     .header a {
         font-size: 0.8rem;
@@ -36,7 +37,7 @@
     .d-flex {
         display: flex !important;
         color:#646464;
-        font-size: 0.95em;
+        font-size: 0.95rem;
     }
 
     .space-between {
@@ -51,16 +52,19 @@
         font-style: italic;
         margin-left: 5px;
         font-size:0.9em;
-        min-width: 350px;
-        border-bottom: 1px solid #898888;
+        min-width: 300px;
+        border-bottom-width: 1px;
+        border-bottom-style:solid;
+        border-bottom-color:#898888;
         color: #973752;
         font-weight: 600;
+        float:right;
     }
 
     .section h5 {
         margin: 0;
         font-weight: 800;
-        color:  #525252;;
+        color:  #525252;
     }
     .section {
         box-shadow: inset 2px 2px 0.1em #ccc, 
@@ -80,53 +84,111 @@
         font-weight: 600;
         font-size: 0.9em;
     }
+
+    table tr {
+        margin:0;
+        padding: 1px;
+    }
+    .decoration-none {
+        text-decoration: none !important;
+        color: #525252;
+    }
+
+    @page {
+        size: b6 portrait;
+        @frame header_frame {
+            -pdf-frame-content: header_content;
+            left: 0pt; width: 600pt; top: 1pt; height: 10pt;
+            /* -pdf-frame-border: 1;   */
+        }
+
+        @frame section_frame {
+            -pdf-frame-content: section;
+            left: 1pt; width: 512pt; top: 15pt; 
+
+            /* -pdf-frame-border: 1;   */
+        }
+    }
 </style>
 {% endblock %}
 {% block content %}
-<div class="container mt-5">
+<div class="container">
     <div class="">
         <div class="section">
-            <div class="d-flex space-between">
+            <!-- <div class="d-flex space-between" id="header_content">
                 <h5 class="">RECEIPT</h5>
-
                 <p class="">Date <b>{{ current_date | date:"y-m-d"}}</b></p>
-                
                 <p>No. <b>{{ tenant.pk }}</b></p>
-            </div>
-            <div class="section-2">
-                <div class="d-flex">
+            </div> -->
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"><h5 class="">RECEIPT</h5></th>
+                    <th scope="col"> <p class="">Date <b>{{ current_date | date:"y-m-d"}}</b></p></th>
+                    <th scope="col"> <p>No. <b>{{ tenant.pk }}</b></p></th>
+                  </tr>
+                </thead>
+            </table>            
+
+            <div class="section-2" id="section">
+                <!-- <div class="d-flex">
                     Recieved From <div class="text-underline">{{ tenant.get_full_name }}</div> 
                     Amount <div class="border-all"> Ksh {{ tenant.rent_charge }} </div>
-                </div>
+                </div> -->
 
-                <div class="d-flex ">
-                    Amount <div class="text-underline">{{ tenant.rent_charge | numbertowords | title }} Kenyan Shillings Only </div> 
-                </div>
-                
-                <div class="d-flex ">
-                    For Payment of  <div class="text-underline"> Rent Payment for {{ tenant.apartment }} room number {{tenant.room_code}}</div> 
-                </div>
+                <table>
+                    <tr>
+                        <td scope="">
+                            <span class="decoration-none">Recieved From</span>
+                            <span class="text-underline">{{ tenant.get_full_name }}</span> 
+                        </td>
+                        <td scope=""> 
+                            Amount <span class="border-all"> Ksh {{ tenant.rent_charge }} </span>
+                        </td>
+                    </tr>
 
-                <div class="d-flex space-between">
-                    Paid By
-                    <div class="">
-                        <input type="checkbox" id="cash" name="pay" checked>
-                        <label for="">Cash</label>
-                    </div>
+                    <tr>
+                        <td scope="col">
+                            Amount <span class="text-underline">{{ tenant.rent_charge | numbertowords | title }} Kenyan Shillings Only </span> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col">For Payment of<div class="text-underline"> Rent Payment for {{ tenant.apartment }} room number {{tenant.room_code}}</div> 
+                        </td>
+                    </tr>
+                    
+                <tr>
+                    <td>Paid By</td>
+                </tr>
 
-                    <div class="">
-                        <input type="checkbox" id="mpesa" name="pay">
-                        <label for="">MPESA</label>
-                    </div>
-                    <div class="">
-                        <input type="checkbox" id="bank" name="pay">
-                        <label for="">Bank</label>
-                    </div>                    
-                </div>
+                <tr class="">
+                    <td>
+                        <div class="">
+                            <input type="checkbox" id="cash" name="pay" checked>
+                            <label for="">Cash</label>
+                        </div>
+                    </td>
 
-                <div class="d-flex ">
-                    Recieved By<div class="text-underline">{{ user.get_full_name }}</div> 
-                </div>
+                    <td>
+                        <div class="">
+                            &n
+                            <label for="">MPESA</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="">
+                            <input type="checkbox" id="bank" name="pay">
+                            <label for="">Bank</label>
+                        </div> 
+                    </td>                   
+                </tr>
+
+                <tr>
+                    <td>Recieved By <div class="text-underline">{{ user.get_full_name }}</div> </td>
+                </tr>
+
+            </table>
             </div>
         </div>
     </div>

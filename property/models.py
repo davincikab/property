@@ -179,7 +179,7 @@ class RentPayment(models.Model):
         ("BANK", "BANK")
     )
 
-    receipt_number = models.CharField(blank=True, max_length=8)
+    receipt_number = models.CharField(blank=True, max_length=8, unique=True)
     tenant = models.ForeignKey(Tenants, on_delete=models.CASCADE)
     amount_paid = models.IntegerField("Amount Paid")
     paid_on = models.DateTimeField("Payment Date", auto_now=True)
