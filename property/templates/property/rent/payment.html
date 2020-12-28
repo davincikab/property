@@ -24,7 +24,8 @@
     .header a {
         font-size: 0.8rem;
         margin-left: 0.5em;
-        border-radius: 1em;
+        border-radius: 0.5em;
+        padding:4px;
     }   
 
     .header a:hover {
@@ -87,7 +88,7 @@
         <h6 class="text-center">Payment</h6>
 
         {% if not tenant.is_paid %}
-            <a href="" class="bg-brand px-1">
+            <a href="" class="bg-brand">
                 <i class="fa fa-print"></i>
                 print
             </a>

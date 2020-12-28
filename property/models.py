@@ -184,6 +184,7 @@ class RentPayment(models.Model):
     amount_paid = models.IntegerField("Amount Paid")
     paid_on = models.DateTimeField("Payment Date", auto_now=True)
     payment_mode = models.CharField("Payment Mode", max_length=50, choices=PAYMENT_MODE)
+    receipt = models.FileField("Receipt", upload_to="reciepts/%Y/", blank=True)
 
     class Meta:
         verbose_name = "RentPayment"

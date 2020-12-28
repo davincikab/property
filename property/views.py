@@ -5,9 +5,12 @@ from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from django.utils import timezone
+from django.template.loader import get_template
 
 # 3rd party imports
 from datetime import datetime
+from xhtml2pdf import pisa
+from io import BytesIO
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
@@ -315,5 +318,15 @@ def make_payment(request, title, tenant_id):
     return render(request, "property/rent/payment.html", context)
 
 # receipt view
-def create_receipt():
-    render()
+def print_receipt(request):
+    return render(request)
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+
+    if not pdf.error:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
