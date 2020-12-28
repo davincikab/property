@@ -4,8 +4,10 @@ from django.core.serializers import serialize
 from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.utils import timezone
 
 # 3rd party imports
+from datetime import datetime
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
@@ -219,7 +221,20 @@ class TenantDetailView(DetailView):
         tenant = kwargs['object']
 
         context["payments"] = RentPayment.objects.filter(tenant=tenant)
+        context['is_rent_paid'] = self.is_rent_paid(tenant)
         return context
+
+    def is_rent_paid(self, tenant):
+        current_date = datetime.now()
+        payments = RentPayment.objects.filter(tenant=tenant)\
+            .filter(paid_on__year=current_date.year) \
+            .filter(paid_on__month=current_date.month)
+        
+        print(payments)
+        
+        if len(payments) == 1:
+            return True
+        return False
 
 class TenantsCreateView(CreateView):
     model = Tenants
@@ -282,3 +297,23 @@ class TenantsDeleteView(DeleteView):
 # ============================== RentPayments
 def list_rentpayment(request):
     return render(request, "property/rentpayment_list.html")
+
+# pay rent
+def make_payment(request, title, tenant_id):
+    tenant = get_object_or_404(Tenants, pk=tenant_id)
+    apartment = get_object_or_404(Apartment, slug=title)
+
+    current_date = timezone.now()
+    print(apartment)
+    print(tenant)
+    context = {
+        'tenant':tenant, 
+        'apartment':apartment,
+        'current_date':current_date
+    }
+
+    return render(request, "property/rent/payment.html", context)
+
+# receipt view
+def create_receipt():
+    render()

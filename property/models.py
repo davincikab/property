@@ -27,7 +27,7 @@ class Apartment(models.Model):
     def save(self,*args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-            
+
         super().save(*args, **kwargs)
 
         size = (763, 508)
@@ -157,6 +157,7 @@ class Tenants(models.Model):
     is_active = models.BooleanField("Active Tenant")
     geom = models.PointField(srid=4326)
     is_paid = models.BooleanField(default=False)
+    rent_charge = models.IntegerField(default=10000)
 
     class Meta:
         verbose_name = "Tenants"
@@ -180,7 +181,7 @@ class RentPayment(models.Model):
 
     receipt_number = models.CharField(blank=True, max_length=8)
     tenant = models.ForeignKey(Tenants, on_delete=models.CASCADE)
-    amount_payed = models.IntegerField("Amount Paid")
+    amount_paid = models.IntegerField("Amount Paid")
     paid_on = models.DateTimeField("Payment Date", auto_now=True)
     payment_mode = models.CharField("Payment Mode", max_length=50, choices=PAYMENT_MODE)
 

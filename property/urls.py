@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import home, detail_view, get_property, create_property, update_property, delete_property, filter_property, \
   list_tenants, list_apartment , ApartmentDetailView, filter_apartment, apartment_data, create_apartment, update_apartment, \
-  delete_apartment, TenantDetailView, TenantsCreateView, TenantsDeleteView, TenantsUpdateView
+  delete_apartment, TenantDetailView, TenantsCreateView, TenantsDeleteView, TenantsUpdateView, make_payment
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -32,7 +32,7 @@ urlpatterns = [
   path("apartments/delete/<int:pk>/", delete_apartment, name="delete-apartments"),
 
   # payment
-
+  path("make-payment/<slug:title>/<int:tenant_id>/", make_payment, name="make-payments"),
 ]
 
 if settings.DEBUG:

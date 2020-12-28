@@ -71,12 +71,22 @@
                     <i>{{ object.room_type }}</i> 
                 </div>
             </div>
+
+            <!-- class  -->
+            <div>
+                <a class="btn btn-sm btn-primary text-white" href="/make-payment/{{object.apartment.slug}}/{{object.pk}}">
+                    <i class="fa fa-money"></i> Create Receipt
+                </a>
+            </div>
         </div>
         
 
         <!-- Tenants -->
         <div class="col-md-6">
             <h5 class="text-center">Rent Payment</h5>
+            {% if not is_rent_paid %}
+                <a href="{% url 'make-payments' object.apartment.slug object.pk %}" class="btn btn-sm bg-brand">Make Payment</a>
+            {% endif %}
             {% for payment in payments %}
                 <div class="section mb-2">
                     <h6><a class="link" href="#">{{ payment.receipt_number }}</a></h6>
