@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
+{% load numbertowords %}
 {% block title %} Property {% endblock %}
 {% block style %} 
 <style>
@@ -109,7 +110,7 @@
                 </div>
 
                 <div class="d-flex ">
-                    Amount <div class="text-underline">{{ tenant.rent_charge }} Only </div> 
+                    Amount <div class="text-underline">{{ tenant.rent_charge | numbertowords | title }} Kenyan Shillings Only </div> 
                 </div>
                 
                 <div class="d-flex ">
