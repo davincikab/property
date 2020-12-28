@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load numbertowords %}
+{% block title %} Property {% endblock %}
+{% block style %} 
+<style>
+    .container {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        font-size: 1rem;
+    }
+    
+    h6 {
+        margin-bottom: 0em;
+    }
+    .header {
+        align-items: center;
+        margin-bottom: 0.5em;
+
+    }
+    .header a {
+        font-size: 0.8rem;
+        margin-left: 0.5em;
+        border-radius: 0.5em;
+        padding:4px;
+    }   
+
+    .header a:hover {
+        background-color: var(--primary-color) !important;
+        color:white;
+        text-decoration: none;
+    }
+    .d-flex {
+        display: flex !important;
+        color:#646464;
+        font-size: 0.95em;
+    }
+
+    .space-between {
+        justify-content: space-between;
+    }
+
+    label {
+        margin: 0;
+    }
+
+    .text-underline {
+        font-style: italic;
+        margin-left: 5px;
+        font-size:0.9em;
+        min-width: 350px;
+        border-bottom: 1px solid #898888;
+        color: #973752;
+        font-weight: 600;
+    }
+
+    .section h5 {
+        margin: 0;
+        font-weight: 800;
+        color:  #525252;;
+    }
+    .section {
+        box-shadow: inset 2px 2px 0.1em #ccc, 
+                    2px 2px 0.1em #ccc;
+        padding:6px 8px;
+        border-radius: 4px;
+        width: 600px;
+    }
+
+    b {
+        color: #525252;
+    }
+    .border-all {
+        border-bottom: 1px solid #333;
+        margin-left: 0.2em;
+        color: #973752;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="">
+        <div class="section">
+            <div class="d-flex space-between">
+                <h5 class="">RECEIPT</h5>
+
+                <p class="">Date <b>{{ current_date | date:"y-m-d"}}</b></p>
+                
+                <p>No. <b>{{ tenant.pk }}</b></p>
+            </div>
+            <div class="section-2">
+                <div class="d-flex">
+                    Recieved From <div class="text-underline">{{ tenant.get_full_name }}</div> 
+                    Amount <div class="border-all"> Ksh {{ tenant.rent_charge }} </div>
+                </div>
+
+                <div class="d-flex ">
+                    Amount <div class="text-underline">{{ tenant.rent_charge | numbertowords | title }} Kenyan Shillings Only </div> 
+                </div>
+                
+                <div class="d-flex ">
+                    For Payment of  <div class="text-underline"> Rent Payment for {{ tenant.apartment }} room number {{tenant.room_code}}</div> 
+                </div>
+
+                <div class="d-flex space-between">
+                    Paid By
+                    <div class="">
+                        <input type="checkbox" id="cash" name="pay" checked>
+                        <label for="">Cash</label>
+                    </div>
+
+                    <div class="">
+                        <input type="checkbox" id="mpesa" name="pay">
+                        <label for="">MPESA</label>
+                    </div>
+                    <div class="">
+                        <input type="checkbox" id="bank" name="pay">
+                        <label for="">Bank</label>
+                    </div>                    
+                </div>
+
+                <div class="d-flex ">
+                    Recieved By<div class="text-underline">{{ user.get_full_name }}</div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
