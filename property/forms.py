@@ -19,3 +19,9 @@ class TenantsForm(forms.ModelForm):
 
         # override save 
         # def save(self, )
+
+class RentPaymentForm(forms.ModelForm):
+    
+    class Meta:
+        model = RentPayment
+        fields = "__all__"

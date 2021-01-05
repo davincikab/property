@@ -87,13 +87,25 @@
 
     table tr {
         margin:0;
-        padding: 1px;
+        padding: 1px 8px;
+    }
+    
+    tr td {
+        padding:0;
+        margin:0;
+        border-collapse: collapse;
     }
     .decoration-none {
         text-decoration: none !important;
         color: #525252;
     }
 
+    .w-20 {
+        width:45pt
+    }
+    .w-80 {
+        width: 400pt;
+    }
     @page {
         size: b6 portrait;
         @frame header_frame {
@@ -114,7 +126,7 @@
 {% block content %}
 <div class="container">
     <div class="">
-        <div class="section">
+        <div class="section" id="receipt">
             <!-- <div class="d-flex space-between" id="header_content">
                 <h5 class="">RECEIPT</h5>
                 <p class="">Date <b>{{ current_date | date:"y-m-d"}}</b></p>
@@ -139,12 +151,19 @@
 
                 <table>
                     <tr>
-                        <td scope="">
-                            <span class="decoration-none">Recieved From</span>
-                            <span class="text-underline">{{ tenant.get_full_name }}</span> 
+                        <td class="w-20">Recieved From</td>
+                        <td><div class="text-underline">{{ tenant.get_full_name }}</div> </td>
+                        <td> 
+                            <td>Amount</td>
+                            <td> 
+                                <div class="border-all"> Ksh {{ tenant.rent_charge }} </div>
+                            </td>    
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
                         <td scope=""> 
-                            Amount <span class="border-all"> Ksh {{ tenant.rent_charge }} </span>
+                            <div class="border-all"> Ksh {{ tenant.rent_charge }} </div>
                         </td>
                     </tr>
 
@@ -158,39 +177,31 @@
                         </td>
                     </tr>
                     
-                <tr>
-                    <td>Paid By</td>
-                </tr>
+                    <tr class="">
+                        <td class="w-20">Paid By</td>
+                        <td class="">
+                            <div class="text-underline">Cash</div>
+                        </td>
+                        <td>  </td>
+                    </tr>
 
-                <tr class="">
-                    <td>
-                        <div class="">
-                            <input type="checkbox" id="cash" name="pay" checked>
-                            <label for="">Cash</label>
-                        </div>
-                    </td>
+                    <tr>
+                        <td class="w-20">Recieved By</td>
+                        <td><div class="text-underline">{{ user.get_full_name }} MY NAME</div> </td>
+                        <td>  </td>
+                    </tr>
 
-                    <td>
-                        <div class="">
-                            &n
-                            <label for="">MPESA</label>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="">
-                            <input type="checkbox" id="bank" name="pay">
-                            <label for="">Bank</label>
-                        </div> 
-                    </td>                   
-                </tr>
-
-                <tr>
-                    <td>Recieved By <div class="text-underline">{{ user.get_full_name }}</div> </td>
-                </tr>
-
-            </table>
+                </table>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/html2canvas.min.js' %}"></script>
+<script>
+    html2canvas(document.querySelector("#receipt")).then(canvas => {
+        document.body.appendChild(canvas)
+    });
+</script>
 {% endblock %}

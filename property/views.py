@@ -12,10 +12,11 @@ from datetime import datetime
 from xhtml2pdf import pisa
 from io import BytesIO
 import os
+import json
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
-from .forms import PropertyForm, ApartmentForm, TenantsForm
+from .forms import PropertyForm, ApartmentForm, TenantsForm, RentPaymentForm
 
 
 def home(request):
@@ -314,13 +315,52 @@ def make_payment(request, title, tenant_id):
         'current_date':current_date
     }
 
+    if request.method == "POST":
+        print(request.POST)
+        form = RentPaymentForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+
+            # redirect
+            content = {
+                'status':'OK',
+                'statusCode':200,
+                'message':'Success'
+            }
+
+            return HttpResponse(json.dumps(content))
+        else:
+            content = {
+                'statusCode':403,
+                'message':"Error",
+                'status':'Denied',
+                'errors':form.errors
+            }
+
+            return HttpResponse(json.dumps(content))
+
     if request.GET.get('print') == "True":
         pdf = render_to_pdf("property/rent/receipt.html", context)
         print(pdf)
         return HttpResponse(pdf, content_type='application/pdf')
 
-    return render(request, "property/rent/receipt.html", context)
+    return render(request, "property/rent/payment.html", context)
   
+
+# def commit_payment(request, payment_mode):
+#     payment_form = RentPaymentForm(
+#         receipt_number=receipt_number,
+#         amout_paid=tenant.rent_charge,
+#         payment_mode=payment_mode
+#     )
+
+#     if form.is_valid():
+#         payment = payment_form.save(commit=False)
+#         payment.receipt
+
+#         return HttpResponse({"message":"successfully paid"})
+
 
 def link_callback(uri, rel):
     if not os.path.isfile(uri):
