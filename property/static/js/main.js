@@ -120,6 +120,7 @@ function getListing(url) {
         // console.log(data);
         cardList.innerHTML = data;
 
+        updateCount();
         getPaginator();
     })
     .catch(error => {
@@ -144,6 +145,14 @@ function getPaginator() {
     })
 }
 
+function updateCount() {
+    console.log("Updating count");
+    
+    let count = $(".card-item").length;
+    let text = count + " houses found";
+
+    $('#property-count').text(text);
+}
 
 // toggle list and box mode
 let displayModes = document.querySelectorAll(".display-mode");
