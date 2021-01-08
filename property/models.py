@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from PIL import Image
 from account.models import Landlord
+import uuid 
 
 
 # Property information
@@ -184,7 +185,7 @@ class RentPayment(models.Model):
     amount_paid = models.IntegerField("Amount Paid")
     paid_on = models.DateTimeField("Payment Date", auto_now=True)
     payment_mode = models.CharField("Payment Mode", max_length=50, choices=PAYMENT_MODE)
-    receipt = models.FileField("Receipt", upload_to="reciepts/%Y/%M/", blank=True)
+    receipt = models.ImageField("Receipt", upload_to="reciepts/%Y/%M/")
 
     class Meta:
         verbose_name = "RentPayment"
@@ -192,8 +193,8 @@ class RentPayment(models.Model):
 
     def __str__(self):
         return self.receipt_number
-    
-    def save(self, *args, **kwargs):
+
+    def save(self,*args, **kwargs):
         super().save(*args, **kwargs)
 
     # def get_absolute_url(self):

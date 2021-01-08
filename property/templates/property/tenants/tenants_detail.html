@@ -74,9 +74,11 @@
 
             <!-- class  -->
             <div>
-                <a class="btn btn-sm btn-primary text-white" href="/make-payment/{{object.apartment.slug}}/{{object.pk}}">
-                    <i class="fa fa-money"></i> Create Receipt
-                </a>
+                {% if not is_rent_paid and object.is_active %}
+                    <a class="btn btn-sm btn-primary text-white" href="/make-payment/{{object.apartment.slug}}/{{object.pk}}">
+                        <i class="fa fa-money"></i> Create Receipt
+                    </a>
+                {% endif %}
             </div>
         </div>
         
@@ -84,12 +86,17 @@
         <!-- Tenants -->
         <div class="col-md-6">
             <h5 class="text-center">Rent Payment</h5>
-            {% if not is_rent_paid %}
+            {% if not is_rent_paid and object.is_active %}
                 <a href="{% url 'make-payments' object.apartment.slug object.pk %}" class="btn btn-sm bg-brand">Make Payment</a>
             {% endif %}
+
             {% for payment in payments %}
                 <div class="section mb-2">
-                    <h6><a class="link" href="#">{{ payment.receipt_number }}</a></h6>
+                    <div class="d-flex space-between">
+                        <h6><a class="link" href="#">{{ payment.receipt_number }}</a></h6>
+                        <span> <a href="/media/{{ payment.receipt }}">receipt</a></span>
+                    </div>
+                    
                     <p class="d-flex space-between my-0">
                         <small class="text-muted">{{ payment.paid_on }}</small>
                         <small class="text-muted">Amount Paid {{ payment.amount_payed }}</small>

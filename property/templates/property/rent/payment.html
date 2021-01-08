@@ -90,10 +90,10 @@
         <h6 class="text-center">Payment</h6>
 
         {% if not tenant.is_paid %}
-            <a href="?print=True" class="bg-brand">
+            <!-- <a href="?print=True" class="bg-brand">
                 <i class="fa fa-print"></i>
                 print
-            </a>
+            </a> -->
         {% endif %}
     </div>
     
@@ -104,7 +104,7 @@
 
                 <p class="">Date <b>{{ current_date | date:"y-m-d"}}</b></p>
                 
-                <p>No. <b>{{ tenant.pk }}</b></p>
+                <p>No. <b>{{ reciept_number }}</b></p>
             </div>
             <div class="section-2">
                 <div class="d-flex">
@@ -159,8 +159,9 @@
         // csrfmiddlewaretoken:$('input[name="csrfmiddlewaretoken"]').attr('value'),
         csrfmiddlewaretoken: '{{ csrf_token }}',
         tenant:'{{ tenant.pk }}',
-        amount_paid:'tenant.rent_charge ',
+        amount_paid:'{{ tenant.rent_charge }}',
         payment_mode:"CASH",
+        receipt_number:"{{ reciept_number }}"
     };
 
     var canvasElement;
@@ -216,7 +217,7 @@
         // send the data to 
         fetch("", {
             method:'POST',
-            data:fd,
+            body:fd,
             responseType:"application/json"
         })
         .then(res => res.json())
@@ -225,7 +226,9 @@
             if(response.message == "Success") {
                 // Notify the user
                 alert("Payment Made");
+
                 // redirect to tenants page;
+                window.location.assign("/tenants/{{ tenant.id }}/")
             } else {
                 console.log(response);
             }

@@ -196,18 +196,6 @@ figure {
     margin:0;
 }
 
-.btn-add {
-    position: fixed;
-    top:60%;
-    left:0.2%;
-    z-index: 3;
-    padding: 0.2em;
-    border-radius: 0.2em;
-    background-color: var(--brand-color);
-    width: 40px;
-    color: white;
-    text-align: center;
-}
 
 .footer {
     height: 100px;

@@ -41,7 +41,7 @@
                 {{ form.year_built }}
 
 
-                <input type="text" name="geom" value="{{ form.geom.value }}" class="form-control form-control-sm my-2" id="id_geom">
+                <input type="text" name="geom" value="{{ form.geom.value }}" class="form-control form-control-sm my-2" id="id_geom" readonly>
                 <input type="text" name="property_type" value="{{ form.property_type.value }}" class="form-control form-control-sm my-2 d-none" id="id_property_type">
                 
                 <div class="py-1">
@@ -51,7 +51,9 @@
                 </div>
             </div>
             <div class="col">
-                
+                {{ form.property_type.label_tag}}
+                {{ form.property_type }}
+
                 {{ form.description.label_tag}}
                 {{ form.description }}
 
@@ -66,9 +68,14 @@
 </div>   
 {% endblock %}
 {% block javascript %} 
+    <script>
+            $("#id_apartment").attr('hidden', true);
+            $("#id_location").attr('readonly', true);
+            $("label[for=id_apartment").attr('class', 'd-none');
+    </script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
     <script src="{% static 'js/addControl.js' %}"></script>
-    <script src="{% static 'js/createupdate.js' %}"></script>
+    <!-- <script src="{% static 'js/createupdate.js' %}"></script> -->
 {% endblock %}

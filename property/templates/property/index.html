@@ -129,12 +129,6 @@
             <label for="toggle-map" class="my-0">Toggle Map</label>
         </div>
 
-        {% if user.is_authenticated and user.is_agency %}
-            <a href="{% url 'create-property' %}" class="btn-add"> 
-                <i class="fa fa-plus"></i>
-            </a>
-        {% endif %}
-
     </div>
 </div>
 {% endblock %}

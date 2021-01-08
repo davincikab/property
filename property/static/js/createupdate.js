@@ -5,6 +5,13 @@ let center = propertyLocation.text().trim();
 center = center != "None" ? center.match(/(.[0-9])\.([0-9]){5,15}/g) : {lat: -1.4041005485564289, lng: 36.72112131585477};
 
 console.log(center);
+if(center[0]) {
+    geocodeLocation({
+        lat:parseFloat(center[1]),
+        lng:parseFloat(center[0])
+    });
+}
+
 center = (center instanceof Array) ? center.map(ct => parseFloat(ct)).reverse() : center;
 
 var map  = L.map('map', { 

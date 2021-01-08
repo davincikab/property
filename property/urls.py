@@ -10,10 +10,10 @@ urlpatterns = [
   path('', home, name="home"),
   path("filter-property", filter_property , name="filter-property"),
   path('property-data/', get_property, name="property"),
-  path('detail/<slug:title>', detail_view, name="detail-view"),
-  path('create/',create_property , name="create-property"),
-  path('update/<slug:title>', update_property, name="update-property"),
-  path('delete/<slug:title>', delete_property, name="delete-property"),
+  path('property/detail/<slug:title>', detail_view, name="detail-view"),
+  path('property/<slug:title>/create/',create_property , name="create-property"),
+  path('property/update/<slug:title>', update_property, name="update-property"),
+  path('property/delete/<slug:title>', delete_property, name="delete-property"),
 
   # tenants tenants/{{object.apartment.slug}}/update/{{object.pk}}
   path("tenants/", list_tenants, name="tenants"),

@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from django.utils import timezone
 from django.template.loader import get_template
+from django.views.decorators.csrf import csrf_exempt
 
 # 3rd party imports
 from datetime import datetime
@@ -13,6 +14,7 @@ from xhtml2pdf import pisa
 from io import BytesIO
 import os
 import json
+import uuid 
 
 # local import
 from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
@@ -55,7 +57,7 @@ def get_property(request):
     property_data = serialize('geojson', Property.objects.all())
     return HttpResponse(property_data)
 
-def create_property(request):
+def create_property(request, title):
     if request.method == "POST":
         print(request.POST)
 
@@ -75,9 +77,17 @@ def create_property(request):
                 image.save()
 
             
-            return redirect('/detail/'+ slug)
+            return redirect("/")
     else:
-        form = PropertyForm()
+        apartment = Apartment.objects.get(slug=title)
+
+        initial_data = {
+            'apartment':apartment,
+            'geom':apartment.geom,
+            'location':apartment.location
+        }
+        
+        form = PropertyForm(initial= initial_data)
     return render(request, 'property/create_property.html',{'section':'Create Property', 'form':form})
 
 def update_property(request, title):
@@ -96,7 +106,7 @@ def update_property(request, title):
                 image = PropertyImage(house=house, image=image_file)
                 image.save()
 
-            return redirect('/detail/'+ house.slug)
+            return redirect("/property/detail/" + home.slug)
     else:
         form = PropertyForm(instance=house)
 
@@ -304,6 +314,7 @@ def list_rentpayment(request):
     return render(request, "property/rentpayment_list.html")
 
 # pay rent
+@csrf_exempt
 def make_payment(request, title, tenant_id):
     tenant = get_object_or_404(Tenants, pk=tenant_id)
     apartment = get_object_or_404(Apartment, slug=title)
@@ -312,15 +323,20 @@ def make_payment(request, title, tenant_id):
     context = {
         'tenant':tenant, 
         'apartment':apartment,
-        'current_date':current_date
+        'current_date':current_date,
+        'reciept_number':uuid.uuid4().hex[:6].upper()
     }
 
     if request.method == "POST":
-        print(request.POST)
+        # receipt image
         form = RentPaymentForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save()
+            form.save(receiptString=request.POST['receipt'])
+
+            # update tenant info
+            tenant.is_paid = True
+            tenant.save()
 
             # redirect
             content = {

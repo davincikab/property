@@ -8,8 +8,34 @@
         padding:0.2em
     }
 
+    .col-md-6 {
+        position: relative;
+    }
+
+    .btn {
+        padding: 0.1em 0.9em !important;
+    }
+
     h5, h6 {
         font-weight: 500 !important;
+    }
+
+    .btn-right {
+        right: 2%;
+        left: 100% !important;
+    }
+
+    .btn-add {
+        position: absolute;
+        top:0%;
+        left:3%;
+        z-index: 3;
+        padding: 0.1em 0.4em;
+        border-radius: 0.2em;
+        background-color: var(--primary-color);
+        width: 40px;
+        color: white;
+        text-align: center;
     }
 </style>
 {% endblock %}
@@ -33,6 +59,11 @@
     <div class="row">
         <!-- Current property -->
         <div class="col-md-6">
+            {% if user.is_authenticated and user.is_agency %}
+                <a href="{% url 'create-property' object.slug %}" class="btn-add"> 
+                    <i class="fa fa-plus"></i>
+                </a>
+            {% endif %}
 
             <h5 class="text-center">Property</h5>
             {% for property in properties %}
@@ -50,6 +81,12 @@
 
         <!-- Tenants -->
         <div class="col-md-6">
+            {% if user.is_authenticated and user.is_agency %}
+                <a href="{% url 'tenants-create' object.slug %}" class="btn-add btn-right"> 
+                    <i class="fa fa-plus"></i>
+                </a>
+            {% endif %}
+
             <h5 class="text-center">Tenants</h5>
             {% for tenant in tenants %}
                 <div class="section mb-2">
