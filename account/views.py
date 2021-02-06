@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
-from .forms import LandlordSignUpForm, AgencySignUpForm
 from django.views.generic import CreateView
 from django.contrib.auth import login
-from .models import User
+from django.views.generic.edit import FormView, CreateView
+from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms.models import model_to_dict
+
+from .forms import LandlordSignUpForm, AgencySignUpForm, ProfileForm
+from .models import User, UserProfile
 
 # Create your views here.
 def signup(request):
@@ -22,6 +27,9 @@ class LandlordSignUpView(CreateView):
     
     def form_valid(self, form):
         user = form.save()
+        user.is_landlord = True
+        user.save()
+
         login(self.request, user)
         return redirect('home')
         
@@ -39,12 +47,89 @@ class AgencySignUpView(CreateView):
         return context
     
     def form_valid(self, form):
-        user = form.save()
+        user = form.save(commit=False)
+        user.is_agent = True
+        user.save()
         login(self.request, user)
         return redirect('home')
    
 
 # profile view
-def profile(request):
-    return render(request, "account/user_profile.html")
+class ProfileCreateView(LoginRequiredMixin, FormView):
+    login_url = "/user/login/"
+    model = UserProfile
+    form_class = ProfileForm
+    template_name = "account/create_profile.html"
+    success_url = "/account/profile"     
 
+    def get_initial(self):  
+        user = User.objects.get(username = self.request.user.username)
+        try:
+            profile = UserProfile.objects.get(user=self.request.user)
+
+            # get plot info 
+
+            profile = {**model_to_dict(profile), **model_to_dict(user)}
+        except UserProfile.DoesNotExist:
+            profile = model_to_dict(user)
+        
+        return profile
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+
+        try:
+            user_profile = UserProfile.objects.get(user=self.request.user)
+            form = self.form_class(self.request.POST or None, self.request.FILES, instance=user_profile)
+            form.save()
+        except UserProfile.DoesNotExist:
+            print(self.request.FILES)
+            profile.user = self.request.user
+            # profile.image = self.request.FILES
+            profile.save()
+            
+           
+
+        print('Valid')
+        user_details = self.request.user
+
+        from operator import itemgetter
+        first_name, last_name, surname = itemgetter('first_name', 'last_name', 'surname')(self.request.POST)
+
+        user_details.first_name = first_name
+        user_details.last_name = last_name
+        user_details.surname = surname
+
+        user_details.save()
+
+        return redirect(self.success_url)
+    
+    def form_invalid(self, form):
+        print(form)
+        print(form.errors)
+        return HttpResponse("Invalid data")
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    login_url = '/user/login/' 
+    template_name = "account/user_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            username = self.request.GET.get('user', None)
+            # print(User.objects.get(username=user))
+            if username:
+                context['profile'] = UserProfile.objects.get(user__username=username)
+            else:
+                context['profile'] = UserProfile.objects.get(user=self.request.user)
+        except UserProfile.DoesNotExist or User.DoesNotExist:
+            print("Failed")
+            context["profile"] = {}
+        
+        return context
+    

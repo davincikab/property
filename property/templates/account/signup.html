@@ -1,10 +1,27 @@
 {% extends 'base.html' %}
-{% block title %} Login {% endblock %}
+{% block title %} Sign Up {% endblock %}
+{% block style %} 
+<style>
+    .card {
+        min-width: 30vw;
+        box-shadow: 2px 2px 0.3em #ddd;
+    }
+    .container {
+        display: flex;
+        align-self:center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
 {% block content %}
     <div class="main-container">
-        <div class="container">
-            <a href="{% url 'agency-signup'%}" class="btn btn-primary">SignUp as Agency</a>
-            <a href="{% url 'landlord-signup' %}" class="btn btn-primary">SignUp as Landlord</a>
+        <div class="container mt-5">
+            <div class="card py-2 px-2">
+                <h5>Sign Up to</h5>
+                <a href="{% url 'agency-signup'%}" class="btn btn-primary my-2">SignUp as Agency</a>
+                <a href="{% url 'landlord-signup' %}" class="btn btn-primary">SignUp as Landlord</a>
+            </div>
+            
         </div>
     </div>
 {% endblock %}

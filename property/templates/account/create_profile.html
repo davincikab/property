@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+
+{% block style %}
+    <!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> -->
+{% endblock %}
+
+{% block content %}
+<style>
+  .navbar {
+    width: 100%;
+    box-shadow: 1px 1px 0.3em #343434;
+  }
+  .container {
+      margin-top: 80px;
+  }
+  .spinner {
+            position: absolute;
+            top:0;
+            left:0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #a3a3a36b;
+        }
+
+        .spinner div i {
+            font-size: 2em;
+            font-size: 2.5em;
+            color: var(--primary);
+            animation-name: spin;
+            animation-duration: 2s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform:rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+</style>
+<div class="spinner d-none">
+  <div class="">
+      <i class="fa fa-spinner"></i>
+  </div>
+</div>
+<div class="container-fluid my-5 d-flex justify-content-center">
+    <div class="col-md-6">
+        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_number">{{ form.first_name.label}}</label>
+                    {{ form.first_name }}
+                  </div>
+        
+                  <div class="form-group col-md-6">
+                    <label for="phone_number">{{ form.phone_number.label }}</label>
+                    {{ form.phone_number }}
+                  </div>
+              </div>
+        
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="department">{{ form.last_name.label}}</label>
+                    {{ form.last_name }}
+                  </div>
+        
+                  <div class="form-group col-md-6">
+                    <label for="employee_status">{{ form.surname.label }}</label>
+                    {{ form.surname }}
+                  </div>          
+              </div>
+
+              <div class="form-group">
+                <label for="county">{{ form.email.label }}</label>
+                {{ form.email }}
+              </div>
+
+              <div class="form-group">
+                <label for="profile_pic">{{ form.image.label }}</label>
+                {{ form.image }}
+              </div>
+              
+              {% if form.email.value %}
+                <input type="submit" name="Login" value="Update Profile" class="btn btn-success mt-2">
+              {% else %}
+                <input type="submit" name="Login" value="Create Profile" class="btn btn-success mt-2">
+              {% endif %}
+              
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %} 
+<script src="{% static 'js/addControl.js' %}"></script>
+<script>
+  // spinner to indicate an action
+  $('#payment_form').on("submit", function(e) {
+      // load the spinner
+      $('.spinner').toggleClass('d-none');
+  });
+</script>
+{% endblock %}

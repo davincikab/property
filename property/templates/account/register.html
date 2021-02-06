@@ -11,16 +11,19 @@
     }
     .container form {
         min-width: 80%;
+        box-shadow: 2px 2px 1em #ddd,
+                    2px 2px 2em #ccc;
     }
 </style> 
 <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 {% endblock %}
 {% block content %}
 <div class="container">
-    <form action="" method="post">
+    <form action="" method="post" class="mt-5 px-2 py-2">
         <h5>{{ title }}</h5>
         {% csrf_token %}
         <div class="form-row">
+            {{ form.errors }}
             <div class="col">
                 {{ form.username.label_tag }}
                 {{ form.username }}
@@ -39,8 +42,8 @@
                 {{ form.phone_number.label_tag }}
                 {{ form.phone_number }}
 
-                {{ form.password.label_tag }}
-                {{ form.password }}
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
 
                 {{ form.password2.label_tag }}
                 {{ form.password2 }}

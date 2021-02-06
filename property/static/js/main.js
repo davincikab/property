@@ -31,7 +31,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 
 var property = L.geoJSON(null, {
     onEachFeature:function(feature, layer) {
-        let index = feature.properties.objectid;
+        let index = feature.properties.pk;
 
         let popupString = "<div class='popup-content'><img src='https://unsplash.it/id/"+index+"/200/75' class='img-top'>"+
         "<div class='d-flex'>"+
@@ -40,7 +40,8 @@ var property = L.geoJSON(null, {
         "<span>130 <i class='fa fa-area-chart'></i></span>"+
         "</div>"+
         "<p class='my-1 px-2'> Ksh "+ feature.properties.price +"</p>"+
-        "<p class='my-1 px-2'>"+ feature.properties.location +"</p>";
+        "<p class='my-1 px-2'>"+ feature.properties.location +"</p>"
+        "<p class='my-1 px-2'> Get Directions"+ feature.properties.location +"</p>";
 
         layer.bindPopup(popupString);
     },

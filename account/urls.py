@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import LandlordSignUpView, signup, AgencySignUpView, profile
+from .views import LandlordSignUpView, signup, AgencySignUpView, ProfileView, ProfileCreateView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("", signup, name="signup"),
-    path("profile/", profile, name="profile"),
+    path("profile/", ProfileView.as_view(), name="profile"),
+    path("update_profile/", ProfileCreateView.as_view(), name="update-profile"),
     path("signup/agency", AgencySignUpView.as_view(), name="agency-signup"),
     path("signup/landlord", LandlordSignUpView.as_view(), name="landlord-signup"),
 

@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import User, Landlord, Contact
+from .models import User, Landlord, Contact, UserProfile
 
 # Register your models here.
 admin.site.register(User)
 admin.site.register(Landlord)
 admin.site.register(Contact)
+admin.site.register(UserProfile)
 

@@ -2,24 +2,26 @@
 {% block title %} User Profile {% endblock %}
 {% block style %}
     <style>
-        .card {box-shadow: 2px 2px 0.1em var(--light);
-            max-width:300px;
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            box-shadow: 2px 2px 0.1em var(--light);
             padding: 0rem;
             overflow: hidden;
+            display: flex;
+            flex-direction: row;
         }
 
         .card .card-img-top {
-            height: 300px;
-            width: 300px;
             object-fit: cover;
         }
 
         .info p {
             margin: 0;
             font-size: 0.9rem;
-            border-style: solid;
-            border-color: var(--gray2);
-            border-width: 0.5px 0px 0px;
             display: flex;
             justify-content: space-between;
             padding: 0.2em;
@@ -33,26 +35,36 @@
 {% block content %}
 <div class="container mt-5">
        <div class="row">
-           <div class="col-md-6">
-               <!-- User Info -->
-               <div class="card">
-                    <img src="/media/{{ user.userprofile.photo }}" alt="" class="card-img-top">
+            <!-- User Info -->
+            {% if profile %}
+            <div class="card">
+                <div class="">
+                    <img src="/media/{{ profile.image }}" alt="" class="card-img-top">
+                    
+                </div>
+                <div class="info px-3">
+                    <b>Username</b> 
+                    <p>{{ profile.user.username}}</p>
+                    <b>Email</b>
+                    <p> {{ profile.user.email }}</p>
+                    <b>Full Name</b>
+                    <p> {{ profile.user.last_name }} {{ profile.user.first_name }}</p>
 
-                    <div class="info">
-                        <p><b>Username</b> {{ user.username}}</p>
-                        <p><b>Email</b> {{ user.email }}</p>
-                        <p><b>Full Name</b> {{ user.last_name }} {{ user.first_name }}</p>
-                    </div>
-               </div>
-           </div>
-           <div class="col-md-6">
-               <!-- <h6>User Actions</h6> -->
-               <a href="{% url 'password_change' %}" class="btn btn-success my-2">Change Password</a><br>
-               <a href="" class="btn btn-success">
-                   <i class="fa fa-pen"></i>Edit Profile
-                </a>
-                
-           </div>
+                    {% if user.username == profile.user.username %}
+                        <div class="btn-group my-2">
+                            <a href="{% url 'password_change' %}" class="btn btn-sm btn-success">Change Password</a><br>
+                            <a href="{% url 'update-profile' %}" class="btn btn-sm btn-success mx-1">
+                                <i class="fa fa-pen"></i>Edit Profile
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="card">
+                <h4>User Profile Does Not exist.</h4>
+            </div>
+            {% endif %}
        </div>
 </div>
 {% endblock %}

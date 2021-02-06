@@ -39,9 +39,6 @@
               <li class="nav-item {% if section == 'apartments' %} active {% endif %}">
                 <a class="nav-link" href="{% url 'apartments' %}" tabindex="-1">Apartment</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1">Disabled</a>
-              </li>
             </ul>
 
             <ul class="navbar-nav">
@@ -50,10 +47,13 @@
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
               </li>
 
-              <span class="navbar-text">
-                {{ user.username }}
-              </span>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}"> {{ user.username }}</a>
+              </li>
               {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signup' %}">Register</a>
+                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
