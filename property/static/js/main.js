@@ -19,6 +19,8 @@ var propertyIcon = L.divIcon({
     html:""
 });
 
+var userLocationMarker = L.marker([0,0]);
+
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='+ accessToken , {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
@@ -40,8 +42,8 @@ var property = L.geoJSON(null, {
         "<span>130 <i class='fa fa-area-chart'></i></span>"+
         "</div>"+
         "<p class='my-1 px-2'> Ksh "+ feature.properties.price +"</p>"+
-        "<p class='my-1 px-2'>"+ feature.properties.location +"</p>"
-        "<p class='my-1 px-2'> Get Directions"+ feature.properties.location +"</p>";
+        "<p class='my-1 px-2'>"+ feature.properties.location +"</p>"+
+        "<button class=' my-2 mx-2 px-2 btn btn-outline-primary btn-sm btn-direction' data-pk='" + feature.properties.pk +"'> Get Directions</button>";
 
         layer.bindPopup(popupString);
     },
@@ -61,14 +63,35 @@ fetch('/property-data/')
 
     // display the first 20 
     // createCard(properties.features.slice(0, 20));
+    addDirectionListener();
 })
 .catch(error => {
     console.error(error);
 });
 
+// map events
+map.on("popupopen", function(e) {
+    addDirectionListener();
+});
+
+function addDirectionListener() {
+    let directionBtns = document.querySelectorAll(".btn-direction");
+    console.log(directionBtns);
+
+    directionBtns.forEach(btn => {
+        btn.addEventListener("click", function(e) {
+            console.log(this);
+
+            let propertyPk = btn.getAttribute("data-pk");
+            let feature = properties.features.find(feature => feature.properties.pk == parseInt(propertyPk))
+            let coordinates = feature.geometry.coordinates;
+            updateDestination(coordinates);
+        });
+    });
+}
+
 // get listing
 getListing("/filter-property?page=1");
-
 
 function createCard(data) {
     let cardListString = "";
@@ -170,6 +193,84 @@ displayModes.forEach(displayMode => {
         displayMode.classList.add("active");
         cardList.classList.add("table-view");
     });
+});
+
+ 
+function updateDestination(coordinates) {
+    // update the destination
+    let latLng = L.latLng(coordinates.reverse());
+    let waypoints = routerControl.getWaypoints();
+
+    routerControl.setWaypoints([
+        waypoints[0].latLng,
+        latLng
+    ]);
+}
+
+// geolocation control
+var geolocationControl = new L.Control({position:"topleft"});
+geolocationControl.onAdd = function(map) {
+    let div = L.DomUtil.create("button", "btn btn-locate");
+
+    div.innerHTML = "<img src='/static/images/geolocate.svg' alt='geolocate'>";
+
+    div.addEventListener("click", function(e) {
+        map.locate();
+    });
+
+    return div;
+}
+
+map.addControl(geolocationControl);
+
+// map location event
+map.on("locationfound", function(e) {
+    // get the user location
+    console.log(e);
+
+    // flyto user location
+    map.flyTo(e.latlng, 16);
+
+    // add user location marker
+    userLocationMarker.setLatLng(e.latlng).addTo(map);
+
+    // update waypoints
+    let waypoints = routerControl.getWaypoints();
+
+    routerControl.setWaypoints([
+        e.latlng,
+        waypoints[1].latLng,
+    ]);
+    
+});
+
+map.on("locationerror", function(e) {
+    console.log(e);
+});
+
+// create a routing control
+var routerControl = L.Routing.control({
+    router: L.Routing.mapbox('pk.eyJ1IjoiZGF1ZGk5NyIsImEiOiJjanJtY3B1bjYwZ3F2NGFvOXZ1a29iMmp6In0.9ZdvuGInodgDk7cv-KlujA'),
+    collapsible:true,
+    waypoints: [],
+    geocoder: L.Control.Geocoder.nominatim(),
+    createMarker: function(i, wp) {
+          var options = {
+        },
+          
+        marker = L.marker(wp.latLng, options);
+        return false;
+    },
+    lineOptions:{
+        styles:[
+            {color: '#666', opacity: 1, weight: 2}
+        ],
+        addWaypoints:false
+    }
+}).addTo(map);
+
+routerControl.on("routesfound", function(e) {
+    console.log(e);
 });
 
 // TODO: Toggle filter section: bed, bathroom, price, 

@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms.models import model_to_dict
 
 from .forms import LandlordSignUpForm, AgencySignUpForm, ProfileForm
+from property.models import Apartment
 from .models import User, UserProfile
 
 # Create your views here.
@@ -125,11 +126,14 @@ class ProfileView(LoginRequiredMixin, TemplateView):
             # print(User.objects.get(username=user))
             if username:
                 context['profile'] = UserProfile.objects.get(user__username=username)
+                context['apartments'] = Apartment.objects.filter(agent__user__username=username)
             else:
                 context['profile'] = UserProfile.objects.get(user=self.request.user)
+                context['apartments'] = Apartment.objects.filter(agent__user=self.request.user)
         except UserProfile.DoesNotExist or User.DoesNotExist:
             print("Failed")
             context["profile"] = {}
+            context['apartments'] = {}
         
         return context
     

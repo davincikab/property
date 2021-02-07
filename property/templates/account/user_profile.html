@@ -66,5 +66,22 @@
             </div>
             {% endif %}
        </div>
+
+       <h5>Apartments</h5>
+       <table class="table">
+           <thead>
+               <th>Name</th>
+               <th>Location</th>
+               <th>Available Units</th>
+           </thead>
+        {% for apartment in apartments %}
+            <tr>
+                <td><a href="{% url 'apartment-detail' apartment.pk %}">{{ apartment.name }}</a></td>
+                <td>{{ apartment.location }}</td>
+                <td>{{ apartment.get_empty_units }}</td>
+            </tr>
+            
+        {% endfor %}
+       </table>
 </div>
 {% endblock %}
