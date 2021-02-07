@@ -4,9 +4,13 @@ from django.core.serializers import serialize
 from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import BaseCreateView
 from django.utils import timezone
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import user_passes_test
 
 # 3rd party imports
 from datetime import datetime
@@ -17,8 +21,9 @@ import json
 import uuid 
 
 # local import
-from .models import Property, PropertyImage, Apartment, RentPayment, Tenants
+from .models import Property, PropertyImage, Apartment, RentPayment, Tenants, Agent
 from .forms import PropertyForm, ApartmentForm, TenantsForm, RentPaymentForm
+from .decorator import agentrequired
 
 
 def home(request):
@@ -57,16 +62,19 @@ def get_property(request):
     property_data = serialize('geojson', Property.objects.all())
     return HttpResponse(property_data)
 
+@login_required
 def create_property(request, title):
     if request.method == "POST":
         print(request.POST)
 
+        apartment = Apartment.objects.get(agent__user = request.user)
         form = PropertyForm(data=request.POST)
         if form.is_valid():
             house_form = form.save(commit=False)
 
             # slug
             slug = slugify(house_form.title + str(house_form.pk))
+            house_form.apartment = apartment
             house_form.slug
             house_form.save()
 
@@ -82,6 +90,7 @@ def create_property(request, title):
         apartment = Apartment.objects.get(slug=title)
 
         initial_data = {
+            'year_built':datetime.now().date(),
             'apartment':apartment,
             'geom':apartment.geom,
             'location':apartment.location
@@ -90,6 +99,7 @@ def create_property(request, title):
         form = PropertyForm(initial= initial_data)
     return render(request, 'property/create_property.html',{'section':'Create Property', 'form':form})
 
+@login_required
 def update_property(request, title):
     house = get_object_or_404(Property, slug=title)
     if request.method == "POST":
@@ -112,6 +122,7 @@ def update_property(request, title):
 
     return render(request, 'property/create_property.html',{'section':'Update Property', 'form':form})
 
+@login_required
 def delete_property(request, title):
     house = get_object_or_404(Property, slug=title)
 
@@ -166,17 +177,25 @@ class ApartmentDetailView(DetailView):
         return context 
 
 # crud list
+@user_passes_test(agentrequired)
+@login_required
 def create_apartment(request):
     if request.method == "POST":
         form = ApartmentForm(request.POST)
+        agent = Agent.objects.get(user=request.user)
         if form.is_valid:
-            form.save()
+            apartment = form.save(commit=False)
+            apartment.agent = agent
+            apartment.save()
+
             return redirect(f"/apartments/")
     else:
         form = ApartmentForm()
     
     return render(request, "property/apartment/apartments_create_update.html",{'form':form})
 
+@user_passes_test(agentrequired)
+@login_required
 def update_apartment(request, pk):
     apartment = get_object_or_404(Apartment, pk=pk)
     if request.method == "POST":
@@ -191,6 +210,8 @@ def update_apartment(request, pk):
     
     return render(request, "property/apartment/apartments_create_update.html",{'form':form})
 
+@user_passes_test(agentrequired)
+@login_required
 def delete_apartment(request, pk):
     apartment = get_object_or_404(Apartment, pk=pk)
 
@@ -201,18 +222,26 @@ def delete_apartment(request, pk):
     return render(request, "property/apartment/apartments_delete.html", {'apartment':apartment})
 
 # ========================== Tenants
+@user_passes_test(agentrequired)
+@login_required
 def list_tenants(request):
-    tenants = Tenants.objects.all()
+    tenants = Tenants.objects.filter(apartment__agent__user=request.user)
+    apartments = Apartment.objects.filter(agent__user=request.user)
     active_tag = ""
 
     if request.GET.get('query'):
         query = request.GET.get('query')
-        tenants = Tenants.objects.filter(first_name__icontains = query)
+        tenants = tenants.filter(first_name__icontains = query)
     
     if request.GET.get('house_type'):
         query = request.GET.get('house_type')
         active_tag = query
-        tenants = Tenants.objects.filter(room_type__icontains = query)
+        tenants = tenants.filter(room_type__icontains = query)
+    
+    if request.GET.get('apartment'):
+        query = request.GET.get('apartment')
+        active_tag = query
+        tenants = tenants.filter(apartment__name = query)
     
     paginator = Paginator(tenants, 10)
     page = request.GET.get('page')
@@ -220,6 +249,7 @@ def list_tenants(request):
 
     context = {
         'section':'tenants',
+        'apartments':apartments,
         'tenants':tenants,
         'house_types': ['Single Rooms', 'Bed Sitter', 'One Bedroom', 'Two Bedroom', 'Three Bedroom', 'Four Bedroom', 'Five Bedroom'],
         'active_tag':active_tag
@@ -227,7 +257,7 @@ def list_tenants(request):
 
     return render(request, "property/tenants/tenants_list.html", context)
 
-class TenantDetailView(DetailView):
+class TenantDetailView(LoginRequiredMixin, DetailView):
     model = Tenants
     template_name = "property/tenants/tenants_detail.html"
 
@@ -251,7 +281,7 @@ class TenantDetailView(DetailView):
             return True
         return False
 
-class TenantsCreateView(CreateView):
+class TenantsCreateView(LoginRequiredMixin, CreateView):
     model = Tenants
     template_name = "property/tenants/tenants_create.html"
     form_class = TenantsForm
@@ -275,6 +305,8 @@ class TenantsCreateView(CreateView):
         return render(request, self.template_name, {'form':form})
 
     def post(self, request, *args, **kwargs):
+        # super(BaseCreateView, self).post(request, *args, **kwargs)
+        self.object = None
         form = self.get_form()
 
         if form.is_valid():
@@ -286,7 +318,7 @@ class TenantsCreateView(CreateView):
         form.save()
         return redirect("/tenants/")
 
-class TenantsUpdateView(UpdateView):
+class TenantsUpdateView(LoginRequiredMixin, UpdateView):
     model = Tenants
     form_class = TenantsForm
     template_name = "property/tenants/tenants_create.html"
@@ -303,18 +335,20 @@ class TenantsUpdateView(UpdateView):
         return redirect(url)
     
 
-class TenantsDeleteView(DeleteView):
+class TenantsDeleteView(LoginRequiredMixin, DeleteView):
     model = Tenants
     template_name = "property/tenants/tenants_delete.html"
     success_url = "/tenants/"
     context_object_name = "tenant"
 
 # ============================== RentPayments
+@login_required
 def list_rentpayment(request):
     return render(request, "property/rentpayment_list.html")
 
 # pay rent
 @csrf_exempt
+@login_required
 def make_payment(request, title, tenant_id):
     tenant = get_object_or_404(Tenants, pk=tenant_id)
     apartment = get_object_or_404(Apartment, slug=title)

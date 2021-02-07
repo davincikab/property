@@ -88,10 +88,15 @@
                 <p>
                     {{ property.description }}
                 </p>
+
+                <div class="title-md h5">Posted by</div>
+                <p>
+                    <a href="/account/profile/?user={{ property.apartment.agent.user.username }}">{{ property.apartment.agent.user.username }}</a>
+                </p>
                 
             </div>
 
-            {% if user.is_authenticated and user.is_agency %}
+            {% if user.is_authenticated and property.apartment.agent.user == user %}
                 <div class="px-0">
                     <a href="{% url 'update-property' property.slug %}" class="btn btn-primary text-white"> 
                         <i class="fa fa-pencil"></i> Update

@@ -27,6 +27,12 @@ class Landlord(models.Model):
     # def get_absolute_url(self):
     #     return reverse("Landlord_detail", kwargs={"pk": self.pk})
 
+class Agent(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = "Agent"
+        verbose_name_plural = "Agents"
 # Roles models
 # class Roles
 # Contacts Model

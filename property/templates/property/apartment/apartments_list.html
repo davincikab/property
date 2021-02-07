@@ -161,6 +161,21 @@
     display: flex;
     justify-content: space-between;
 }
+.btn-add {
+    position: absolute;
+    top:0%;
+    left:3%;
+    z-index: 3;
+    padding: 0.1em 0.4em;
+    border-radius: 0.2em;
+    background-color: var(--primary-color);
+    width: 40px;
+    color: white;
+    text-align: center;
+}
+.row {
+    position: relative;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -173,6 +188,11 @@
     </form>
 
     <div class="row my-3">
+        {% if user.is_authenticated and user.is_agency %}
+            <a href="{% url 'create-apartments' %}" class="btn-add bg-brand mx-3 px-2"> 
+                <i class="fa fa-plus"></i>
+            </a>
+        {% endif %}
         <div class="col-md-7" id="apartment-list" >
            
         </div>

@@ -49,23 +49,26 @@
             <span><i class="fa fa-map-marker text-primary mx-2"></i>{{ object.location }}</span>
         </p>
 
-        <p class="my-0 text-center">
-            <a class="btn btn-sm btn-primary text-white" href="{% url 'update-apartments' object.pk %}"><i class="fa fa-pencil-square"></i></a>
-            <a class="btn btn-sm btn-danger text-white" href="{% url 'delete-apartments' object.pk %}"><i class="fa fa-trash"></i></a>
-        </p>
+        {% if user.is_authenticated and user == object.agent.user %}
+            <p class="my-0 text-center">
+                <a class="btn btn-sm btn-primary text-white" href="{% url 'update-apartments' object.pk %}"><i class="fa fa-pencil-square"></i></a>
+                <a class="btn btn-sm btn-danger text-white" href="{% url 'delete-apartments' object.pk %}"><i class="fa fa-trash"></i></a>
+            </p>
+        {% endif %}
     </div>
    
 
     <div class="row">
         <!-- Current property -->
         <div class="col-md-6">
-            {% if user.is_authenticated and user.is_agency %}
+            {% if user.is_authenticated and user == object.agent.user %}
                 <a href="{% url 'create-property' object.slug %}" class="btn-add"> 
                     <i class="fa fa-plus"></i>
                 </a>
             {% endif %}
 
             <h5 class="text-center">Property</h5>
+            <p>Managed By <a href="/account/profile/?user={{ object.agent.user.username }}">{{ object.agent.user.username }}</a></p>
             {% for property in properties %}
                 <div class="section mb-2">
                     <h6 class="my-0"><a class="link" href="{% url 'detail-view' property.slug %}">{{ property.title }}</a></h6>
@@ -81,23 +84,28 @@
 
         <!-- Tenants -->
         <div class="col-md-6">
-            {% if user.is_authenticated and user.is_agency %}
+            {% if user.is_authenticated and user == object.agent.user %}
                 <a href="{% url 'tenants-create' object.slug %}" class="btn-add btn-right"> 
                     <i class="fa fa-plus"></i>
                 </a>
             {% endif %}
-
-            <h5 class="text-center">Tenants</h5>
-            {% for tenant in tenants %}
-                <div class="section mb-2">
-                    <h6><a class="link" href="#">{{ tenant.get_full_name }}</a></h6>
-                    <div class="d-flex space-between">
-                        <span><i class="fa fa-envelope text-brand mx-2"></i> {{ tenant.email }}</span>
-                        <span><i class="fa fa-phone text-brand mx-2"></i> {{ tenant.phone_number }}</span>
-                        <span><i class="fa fa-info-circle text-brand mx-2"></i> {{ tenant.room_code }}</span>
+            
+            {% if user == object.agent.user %}
+                <h5 class="text-center">Tenants</h5>
+                {% for tenant in tenants %}
+                    <div class="section mb-2">
+                        <h6><a class="link" href="#">{{ tenant.get_full_name }}</a></h6>
+                        <div class="d-flex space-between">
+                            <span><i class="fa fa-envelope text-brand mx-2"></i> {{ tenant.email }}</span>
+                            <span><i class="fa fa-phone text-brand mx-2"></i> {{ tenant.phone_number }}</span>
+                            <span><i class="fa fa-info-circle text-brand mx-2"></i> {{ tenant.room_code }}</span>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <!-- images -->
+                <img src="/media/{{ object.apartment_image }}" alt="{{ apartment.name }}" class="img-sm">
+            {% endif %}
         </div>
     </div>    
 </div>

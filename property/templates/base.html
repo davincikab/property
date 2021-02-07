@@ -31,10 +31,12 @@
               <li class="nav-item {% if section == 'home' %} active {% endif %}">
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
               </li>
-             
+              
+              {% if user.is_authenticated and user.is_agency %}
               <li class="nav-item {% if section == 'tenants' %} active {% endif %}">
                 <a class="nav-link" href="{% url 'tenants' %}" tabindex="-1">Tenants</a>
               </li>
+              {% endif %}
 
               <li class="nav-item {% if section == 'apartments' %} active {% endif %}">
                 <a class="nav-link" href="{% url 'apartments' %}" tabindex="-1">Apartment</a>

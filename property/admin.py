@@ -7,7 +7,7 @@ admin.site.register(PropertyImage)
 
 @admin.register(Apartment)
 class ApartmentAdmin(admin.GeoModelAdmin):
-    list_display = ("name", "units", "owner", "occupied_units",)
+    list_display = ("name", "units", "owner", "occupied_units",'agent')
     search_fields = ["name", "owner"]
 
 @admin.register(Tenants)

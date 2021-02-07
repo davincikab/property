@@ -15,7 +15,7 @@ class ApartmentForm(forms.ModelForm):
     
     class Meta:
         model = Apartment
-        exclude = ('slug',)
+        exclude = ('slug','agent')
 
 class TenantsForm(forms.ModelForm):
     class Meta:

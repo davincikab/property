@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from PIL import Image
-from account.models import Landlord
+from account.models import Landlord, Agent
 import uuid 
 
 
@@ -17,6 +17,7 @@ class Apartment(models.Model):
     occupied_units = models.IntegerField("Occupied Units", default=0)
     apartment_image = models.ImageField(upload_to="apartments/%Y/", default="apartment.jpg", blank=True)
     slug = models.SlugField(blank=True)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, default=1)
 
     class Meta:
         verbose_name = "Apartment"

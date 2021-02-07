@@ -103,14 +103,23 @@
 
             <div class="filters">
                 <!-- Available tags -->
-                <h6>BEDROOMS</h6>
-                <div class="bedroom-tags d-flex">
-                    {% for house in house_types %}
-                        <a class="tag {% if house == active_tag %}active{% endif %}" href="?house_type={{house}}"> {{ house }} </a>
-                    {% endfor %}
+                <div class="filter my-2">
+                    <h6>BEDROOMS</h6>
+                    <div class="bedroom-tags d-flex">
+                        {% for house in house_types %}
+                            <a class="tag {% if house == active_tag %}active{% endif %}" href="?house_type={{house}}"> {{ house }} </a>
+                        {% endfor %}
+                    </div>
                 </div>
-
-                <h6></h6>
+                
+                <div class="filter my-2">
+                    <h6>APARTMENT</h6>
+                    <div class="bedroom-tags d-flex">
+                        {% for apartment in apartments %}
+                            <a class="tag {% if apartment.name == active_tag %}active{% endif %}" href="?apartment={{apartment.name}}"> {{ apartment.name }} </a>
+                        {% endfor %}
+                    </div>
+                </div>
 
             </div>
         </div>
